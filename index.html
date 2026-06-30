@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stellar Seeds — Seed Corn Drying Training</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* ── Stellar Seeds Royal Green Palette ── */
+    --brand-green-deep: #0a3d2e;
+    --brand-green-dark: #0f5138;
+    --brand-green: #146b4a;
+    --brand-green-mid: #1a8a5e;
+    --brand-green-light: #34a873;
+    --brand-green-pale: #e6f5ee;
+    --brand-gold: #d4a843;
+    --brand-gold-light: #f0d080;
+    --brand-gold-dark: #b08830;
+    --brand-cream: #f9f6ef;
+    --brand-cream-deep: #eee9dc;
+
+    /* ── UI Tokens ── */
+    --bg: var(--brand-cream);
+    --surface: #fffdf8;
+    --surface-alt: var(--brand-cream-deep);
+    --accent: var(--brand-gold);
+    --accent-dark: var(--brand-gold-dark);
+    --accent-light: var(--brand-gold-light);
+    --green: var(--brand-green-mid);
+    --green-light: var(--brand-green-pale);
+    --red: #c0392b;
+    --red-light: #fdecea;
+    --blue: var(--brand-green);
+    --blue-light: var(--brand-green-pale);
+    --text-primary: #1a1612;
+    --text-secondary: #4a4035;
+    --text-muted: #8a7e6e;
+    --border: #d6cfc0;
+    --shadow: rgba(10, 61, 46, 0.08);
+    --radius: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── Top Bar ── */
+  .top-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 56px;
+    background: var(--brand-green-deep);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    z-index: 1000;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.03em;
+  }
+
+  .top-bar .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .top-bar .logo-mark {
+    width: 32px; height: 32px;
+    background: var(--brand-gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--brand-green-deep);
+    font-weight: 400;
+  }
+
+  .top-bar .logo-text { font-weight: 600; letter-spacing: 0.06em; }
+
+  .progress-container { display: flex; align-items: center; gap: 12px; }
+
+  .progress-bar-bg {
+    width: 200px; height: 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px; overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--brand-gold);
+    border-radius: 3px; width: 0%;
+    transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .progress-label { opacity: 0.85; font-size: 12px; }
+
+  .score-badge {
+    background: rgba(212,168,67,0.25);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+    color: var(--brand-gold-light);
+  }
+
+  /* ── Hero ── */
+  .hero {
+    margin-top: 56px;
+    background: linear-gradient(135deg, var(--brand-green-deep) 0%, var(--brand-green-dark) 40%, var(--brand-green) 100%);
+    color: #fff;
+    padding: 100px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40%; right: -10%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(212,168,67,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30%; left: -10%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(52,168,115,0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 860px; margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+
+  .hero-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: rgba(212,168,67,0.15);
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(212,168,67,0.25);
+    color: var(--brand-gold-light);
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+
+  .hero h1 .brand-name {
+    color: var(--brand-gold);
+  }
+
+  .hero .hero-tagline {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+    color: var(--brand-gold-light);
+    opacity: 0.9;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    opacity: 0.75;
+    max-width: 580px;
+    line-height: 1.8;
+  }
+
+  .hero-stats {
+    display: flex; gap: 40px;
+    margin-top: 48px; flex-wrap: wrap;
+  }
+
+  .hero-stat .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    display: block;
+    color: var(--brand-gold);
+  }
+
+  .hero-stat .label {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── Nav Tabs ── */
+  .nav-sticky {
+    position: sticky; top: 56px; z-index: 999;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-tabs {
+    display: flex;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px; gap: 0;
+  }
+
+  .nav-tab {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.04em;
+    padding: 16px 20px;
+    cursor: pointer; white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    color: var(--text-muted);
+    transition: all 0.25s ease;
+    user-select: none;
+  }
+
+  .nav-tab:hover { color: var(--text-primary); }
+
+  .nav-tab.active {
+    color: var(--brand-green-dark);
+    border-bottom-color: var(--brand-green);
+    font-weight: 600;
+  }
+
+  .nav-tab .tab-icon { margin-right: 6px; font-size: 14px; }
+
+  /* ── Main ── */
+  .main-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 100px;
+  }
+
+  .section {
+    display: none;
+    animation: fadeInSection 0.5s ease forwards;
+  }
+
+  .section.active { display: block; }
+
+  @keyframes fadeInSection {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header { padding: 56px 0 32px; }
+
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--brand-green-dark);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+
+  .section-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 640px;
+  }
+
+  /* ── Content Cards ── */
+  .content-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 40px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 12px var(--shadow);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .content-card:hover {
+    box-shadow: 0 4px 24px rgba(10, 61, 46, 0.12);
+  }
+
+  .content-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.35rem;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+  }
+
+  .content-card p { color: var(--text-secondary); margin-bottom: 12px; }
+
+  .content-card ul { list-style: none; padding: 0; }
+
+  .content-card ul li {
+    padding: 8px 0 8px 28px;
+    position: relative;
+    color: var(--text-secondary);
+  }
+
+  .content-card ul li::before {
+    content: '✓';
+    position: absolute; left: 0;
+    color: var(--brand-green-mid);
+    font-weight: 700; font-size: 0.9em;
+  }
+
+  /* ── Callout ── */
+  .callout {
+    border-left: 4px solid var(--brand-green);
+    background: linear-gradient(90deg, rgba(20,107,74,0.06) 0%, transparent 100%);
+    padding: 20px 24px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin: 20px 0;
+  }
+
+  .callout.info {
+    border-left-color: var(--brand-green-light);
+    background: linear-gradient(90deg, rgba(52,168,115,0.06) 0%, transparent 100%);
+  }
+
+  .callout.warning {
+    border-left-color: var(--red);
+    background: linear-gradient(90deg, rgba(192,57,43,0.06) 0%, transparent 100%);
+  }
+
+  .callout .callout-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brand-green-dark);
+    margin-bottom: 6px; font-weight: 600;
+  }
+
+  .callout.info .callout-label { color: var(--brand-green-light); }
+  .callout.warning .callout-label { color: var(--red); }
+
+  /* ── Formula ── */
+  .formula-box {
+    background: var(--brand-cream-deep);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin: 20px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--text-primary);
+    line-height: 2;
+    overflow-x: auto;
+  }
+
+  /* ── Table ── */
+  .data-table-wrap {
+    overflow-x: auto; margin: 20px 0;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+
+  .data-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .data-table thead {
+    background: var(--brand-green-dark);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .data-table th {
+    padding: 14px 16px;
+    text-align: left; font-weight: 600;
+  }
+
+  .data-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+
+  .data-table tbody tr:nth-child(even) { background: var(--brand-cream-deep); }
+  .data-table tbody tr:hover { background: rgba(20,107,74,0.06); }
+
+  /* ── Quiz ── */
+  .quiz-container {
+    background: var(--surface);
+    border: 2px solid var(--brand-green);
+    border-radius: var(--radius);
+    margin: 40px 0; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(10,61,46,0.1);
+  }
+
+  .quiz-header {
+    background: linear-gradient(135deg, var(--brand-green-deep), var(--brand-green-dark));
+    color: #fff;
+    padding: 20px 32px;
+    display: flex; align-items: center;
+    justify-content: space-between;
+  }
+
+  .quiz-header h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem; font-weight: 400;
+  }
+
+  .quiz-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: rgba(212,168,67,0.25);
+    color: var(--brand-gold-light);
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  .quiz-body { padding: 32px; }
+
+  .quiz-question {
+    font-size: 1.05rem; font-weight: 600;
+    margin-bottom: 24px;
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+
+  .quiz-option {
+    display: flex; align-items: flex-start;
+    gap: 14px; padding: 14px 18px;
+    border: 2px solid var(--border);
+    border-radius: 10px; cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+
+  .quiz-option:hover {
+    border-color: var(--brand-green-light);
+    background: rgba(20,107,74,0.04);
+  }
+
+  .quiz-option.selected {
+    border-color: var(--brand-green);
+    background: rgba(20,107,74,0.06);
+  }
+
+  .quiz-option.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+
+  .quiz-option.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+
+  .quiz-option.disabled { pointer-events: none; }
+
+  .option-marker {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 600;
+    flex-shrink: 0; margin-top: 1px;
+    transition: all 0.2s ease;
+  }
+
+  .quiz-option.selected .option-marker {
+    border-color: var(--brand-green);
+    background: var(--brand-green);
+    color: #fff;
+  }
+
+  .quiz-option.correct .option-marker {
+    border-color: var(--brand-green-mid);
+    background: var(--brand-green-mid); color: #fff;
+  }
+
+  .quiz-option.incorrect .option-marker {
+    border-color: var(--red);
+    background: var(--red); color: #fff;
+  }
+
+  .option-text { flex: 1; line-height: 1.6; padding-top: 3px; }
+
+  /* ── Feedback ── */
+  .quiz-feedback {
+    display: none; margin-top: 20px;
+    padding: 18px 22px; border-radius: 10px;
+    font-size: 0.95rem; line-height: 1.6;
+    animation: fadeUp 0.35s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .quiz-feedback.show { display: block; }
+
+  .quiz-feedback.correct {
+    background: var(--green-light);
+    border: 1px solid var(--brand-green-mid);
+    color: #0a4a30;
+  }
+
+  .quiz-feedback.incorrect {
+    background: var(--red-light);
+    border: 1px solid var(--red);
+    color: #7f1d1d;
+  }
+
+  .quiz-feedback strong {
+    display: block; margin-bottom: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* ── Buttons ── */
+  .quiz-actions { margin-top: 24px; display: flex; gap: 12px; }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; letter-spacing: 0.04em;
+    padding: 12px 28px;
+    border: none; border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 600;
+  }
+
+  .btn-primary {
+    background: var(--brand-green-dark);
+    color: var(--brand-gold-light);
+  }
+
+  .btn-primary:hover {
+    background: var(--brand-green);
+    letter-spacing: 0.06em;
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.4; cursor: not-allowed;
+    letter-spacing: 0.04em;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--brand-green-dark);
+    border: 2px solid var(--border);
+  }
+
+  .btn-secondary:hover { border-color: var(--brand-green); }
+
+  .section-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 48px; padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-nav .btn { font-size: 12px; }
+
+  /* ── Final Score ── */
+  .score-panel {
+    background: linear-gradient(135deg, var(--brand-green-deep), var(--brand-green-dark));
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 48px; text-align: center;
+    margin: 40px 0;
+  }
+
+  .score-panel h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem; margin-bottom: 8px;
+  }
+
+  .score-panel .score-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 4rem;
+    color: var(--brand-gold);
+    margin: 16px 0;
+  }
+
+  .score-panel .score-detail { opacity: 0.7; font-size: 1rem; }
+
+  .score-panel .score-message {
+    margin-top: 24px; font-size: 1.1rem;
+    line-height: 1.7;
+    max-width: 480px;
+    margin-left: auto; margin-right: auto;
+    opacity: 0.85;
+  }
+
+  /* ── Diagram ── */
+  .diagram-container {
+    display: flex; align-items: center;
+    justify-content: center; gap: 24px;
+    margin: 24px 0; flex-wrap: wrap;
+  }
+
+  .diagram-box {
+    padding: 20px 24px;
+    border-radius: 10px; text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 600;
+    min-width: 140px;
+  }
+
+  .diagram-arrow { font-size: 1.5rem; color: var(--text-muted); }
+
+  .diagram-box.kernel {
+    background: #f5e6c8;
+    border: 2px solid var(--brand-gold-light);
+    color: var(--brand-gold-dark);
+  }
+
+  .diagram-box.surface {
+    background: #d5ebe2;
+    border: 2px solid var(--brand-green-light);
+    color: var(--brand-green-dark);
+  }
+
+  .diagram-box.air {
+    background: var(--brand-green-pale);
+    border: 2px solid var(--brand-green-mid);
+    color: var(--brand-green-dark);
+  }
+
+  /* ── Scenario ── */
+  .scenario-card {
+    background: linear-gradient(135deg, var(--brand-cream), var(--brand-cream-deep));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px; margin: 24px 0;
+  }
+
+  .scenario-card .scenario-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--brand-green-dark);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .scenario-card h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem; margin-bottom: 12px;
+  }
+
+  /* ── Fill Blank ── */
+  .fill-blank-input {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    border: none;
+    border-bottom: 2px solid var(--brand-green);
+    background: transparent;
+    padding: 4px 8px; outline: none;
+    width: 80px; text-align: center;
+    transition: border-color 0.2s ease;
+  }
+
+  .fill-blank-input:focus { border-bottom-color: var(--brand-green-deep); }
+
+  /* ── Drop Label ── */
+  .drop-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+
+  /* ── Drag ── */
+  .drag-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 12px 18px;
+    background: var(--brand-cream-deep);
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    cursor: grab;
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+
+  .drag-item:active { cursor: grabbing; }
+  .drag-item:hover { border-color: var(--brand-green); }
+  .drag-item.placed {
+    border-style: solid;
+    border-color: var(--brand-green-mid);
+    background: var(--brand-green-pale);
+  }
+
+  .drop-slot {
+    min-height: 48px;
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    display: flex; align-items: center;
+    padding: 0 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: var(--text-muted);
+    transition: all 0.2s ease;
+  }
+
+  .drop-slot.filled {
+    border-style: solid;
+    border-color: var(--brand-green-mid);
+    background: var(--brand-green-pale);
+    color: var(--text-primary);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .hero { padding: 60px 24px 50px; }
+    .hero-stats { gap: 24px; }
+    .content-card { padding: 24px; }
+    .quiz-body { padding: 20px; }
+    .score-panel { padding: 32px 24px; }
+    .nav-tab { padding: 14px 14px; font-size: 11px; }
+    .top-bar { padding: 0 16px; }
+    .progress-bar-bg { width: 120px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Top Bar ── -->
+<div class="top-bar">
+  <div class="logo-area">
+    <div class="logo-mark">S</div>
+    <span class="logo-text">STELLAR SEEDS — DRYING TRAINING</span>
+  </div>
+  <div class="progress-container">
+    <span class="score-badge" id="scoreDisplay">Score: 0 / 0</span>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <span class="progress-label" id="progressLabel">0%</span>
+  </div>
+</div>
+
+<!-- ── Hero ── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Stellar Seeds — Interactive Training Module</div>
+    <h1>Basic Seed Corn <span class="brand-name">Drying Principles</span></h1>
+    <div class="hero-tagline">Excellence from harvest to storage</div>
+    <p>Master the fundamentals of seed corn drying — from understanding moisture dynamics to managing dryer conditions — through interactive lessons and assessments.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="num">8</span>
+        <span class="label">Lessons</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">25</span>
+        <span class="label">Quiz Questions</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">~45</span>
+        <span class="label">Minutes</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Navigation ── -->
+<div class="nav-sticky">
+  <div class="nav-tabs" id="navTabs">
+    <div class="nav-tab active" data-section="0"><span class="tab-icon">01</span> Introduction</div>
+    <div class="nav-tab" data-section="1"><span class="tab-icon">02</span> How Corn Dries</div>
+    <div class="nav-tab" data-section="2"><span class="tab-icon">03</span> Drying Rate</div>
+    <div class="nav-tab" data-section="3"><span class="tab-icon">04</span> Air Properties</div>
+    <div class="nav-tab" data-section="4"><span class="tab-icon">05</span> Quality Plan</div>
+    <div class="nav-tab" data-section="5"><span class="tab-icon">06</span> Airflow & Front</div>
+    <div class="nav-tab" data-section="6"><span class="tab-icon">07</span> Best Practices</div>
+    <div class="nav-tab" data-section="7"><span class="tab-icon">08</span> Final Assessment</div>
+  </div>
+</div>
+
+<!-- ── Main ── -->
+<div class="main-container">
+
+  <!-- ═══ SECTION 0 ═══ -->
+  <div class="section active" id="section-0">
+    <div class="section-header">
+      <div class="section-number">Section 01</div>
+      <h2 class="section-title">Introduction & Importance of Proper Drying</h2>
+      <p class="section-subtitle">Why mechanical drying is essential for preserving seed quality from harvest through storage.</p>
+    </div>
+
+    <div class="content-card">
+      <h3>What We Want: High Quality Seed</h3>
+      <p>The ultimate goal of seed corn drying is to produce and preserve high quality seed with:</p>
+      <ul>
+        <li>Good warm germination</li>
+        <li>Good seed vigor</li>
+        <li>Resulting in good field emergence</li>
+      </ul>
+    </div>
+
+    <div class="content-card">
+      <h3>Maximum Quality Potential</h3>
+      <p><strong>Maximum quality potential is reached at physiological maturity.</strong> From that point forward, quality must be preserved through careful handling at every stage.</p>
+    </div>
+
+    <div class="content-card">
+      <h3>How Quality Is Preserved</h3>
+      <p>Seed quality needs to be preserved through four critical practices:</p>
+      <ul>
+        <li>Harvesting as close as possible to physiological maturity</li>
+        <li>Good drying practices</li>
+        <li>Good conditioning practices</li>
+        <li>Good storage practices</li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">Key Takeaway</div>
+      <p>Mechanical drying is necessary to preserve seed quality. Without it, seed deteriorates rapidly after physiological maturity.</p>
+    </div>
+
+    <div class="quiz-container" data-quiz="q1">
+      <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 1 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">When is maximum seed quality potential reached?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">At the time of harvest</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">At physiological maturity</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">After drying is complete</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">During seed conditioning</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>Maximum quality potential is reached at physiological maturity. From that point, quality must be preserved through proper drying, conditioning, and storage.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>The correct answer is at physiological maturity. The content states: "Maximum quality potential is reached at physiological maturity."</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q2">
+      <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 2 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">Which of the following is NOT listed as a practice for preserving seed quality?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">Good drying practices</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">Good conditioning practices</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">Good genetic modification practices</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">Good storage practices</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>The four practices are: harvesting near physiological maturity, good drying, good conditioning, and good storage.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>"Good genetic modification practices" is not listed. The four practices are: harvesting near physiological maturity, drying, conditioning, and storage.</div>
+      </div>
+    </div>
+
+    <div class="section-nav"><div></div><button class="btn btn-primary" onclick="goToSection(1)">Next: How Corn Dries →</button></div>
+  </div>
+
+  <!-- ═══ SECTION 1 ═══ -->
+  <div class="section" id="section-1">
+    <div class="section-header">
+      <div class="section-number">Section 02</div>
+      <h2 class="section-title">How Does Ear Corn &amp; Kernels Dry?</h2>
+      <p class="section-subtitle">Understanding moisture movement from the center of the kernel to the surrounding atmosphere.</p>
+    </div>
+
+    <div class="content-card">
+      <h3>Moisture Movement in Ear Corn</h3>
+      <ul>
+        <li>Moisture on the outside surface moves into the surrounding atmosphere</li>
+        <li>Internal moisture moves past or through the kernels to the outside surface</li>
+      </ul>
+    </div>
+
+    <div class="content-card">
+      <h3>How a Kernel Dries</h3>
+      <div class="diagram-container">
+        <div class="diagram-box kernel">Water in<br>Center</div>
+        <span class="diagram-arrow">→</span>
+        <div class="diagram-box surface">Water at<br>Surface</div>
+        <span class="diagram-arrow">→</span>
+        <div class="diagram-box air">Evaporation<br>into Air</div>
+      </div>
+      <p style="margin-top:16px;">Water evaporates from the surface of the kernel. As this happens, water moves from the center of the kernel to the surface.</p>
+    </div>
+
+    <div class="content-card">
+      <h3>Seeds Are Hygroscopic</h3>
+      <ul>
+        <li>After physiological maturity, seed moisture is a function of the surrounding air</li>
+        <li>Seed moisture will be determined by relative humidity and temperature of the air</li>
+        <li>Equilibrium seed moisture content is a function of water vapor pressure</li>
+        <li>These principles are used to dry seed in the dryers</li>
+      </ul>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-label">What does "hygroscopic" mean?</div>
+      <p>Seeds naturally absorb or release moisture based on surrounding air conditions. This property is the entire basis for mechanical seed drying — by controlling the air, we control seed moisture.</p>
+    </div>
+
+    <div class="quiz-container" data-quiz="q3">
+      <div class="quiz-header"><h3>Knowledge Check — True or False</h3><span class="quiz-counter">Q 3 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">True or False: Seeds are hygroscopic, meaning their moisture content is influenced by the surrounding air conditions.</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">T</span><span class="option-text">True</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">F</span><span class="option-text">False</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>Seeds are hygroscopic. After physiological maturity, seed moisture is a function of the surrounding air.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>This is TRUE. The content states: "Seeds Are Hygroscopic... After physiological maturity, seed moisture is a function of the surrounding air."</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q4">
+      <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 4 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">In what order does moisture move during kernel drying?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">Surface → Center → Air</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">Air → Surface → Center</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">Center → Surface → Air (via evaporation)</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">Center → Air directly</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>Water moves from the center of the kernel to the surface, then evaporates from the surface into the surrounding air.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>The correct sequence is: Center → Surface → Air. "Water evaporates from the surface of the kernel. As water evaporates from the surface, water moves from the center of the kernel to the surface."</div>
+      </div>
+    </div>
+
+    <div class="section-nav"><button class="btn btn-secondary" onclick="goToSection(0)">← Previous</button><button class="btn btn-primary" onclick="goToSection(2)">Next: Drying Rate →</button></div>
+  </div>
+
+  <!-- ═══ SECTION 2 ═══ -->
+  <div class="section" id="section-2">
+    <div class="section-header">
+      <div class="section-number">Section 03</div>
+      <h2 class="section-title">Drying Rate &amp; Determining Factors</h2>
+      <p class="section-subtitle">What controls how fast seed dries and how to express and manage the drying rate.</p>
+    </div>
+
+    <div class="content-card">
+      <h3>What Is Drying Rate?</h3>
+      <p>Drying rate is expressed as the <strong>length of time utilized in removing a certain amount of water</strong>, measured in <strong>number of hours per point of moisture removed</strong>.</p>
+      <div class="formula-box">
+        <strong>Example:</strong> Drying from 35% to 12% moisture in 69 hours<br>
+        Drying Rate = 69 / (35 − 12) = <strong>3.0 hours per point</strong>
+      </div>
+    </div>
+
+    <div class="content-card">
+      <h3>Quality Plan Drying Rate Goals</h3>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Sensitivity Level</th><th>Hours Per Point</th></tr></thead>
+          <tbody>
+            <tr><td>Least Sensitive</td><td>3.0</td></tr>
+            <tr><td>Moderately Sensitive</td><td>3.5</td></tr>
+            <tr><td>Sensitive</td><td>4.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="content-card">
+      <h3>Factors Determining Drying Rate</h3>
+      <ul>
+        <li><strong>Points of seed moisture removed</strong> — Higher initial moisture releases moisture easier; it takes longer at low moisture</li>
+        <li><strong>Air temperature</strong> — Higher temperatures accelerate drying rate</li>
+        <li><strong>Air relative humidity</strong> — Lower RH accelerates drying rate</li>
+        <li><strong>Airflow rate</strong> — Faster airflow accelerates drying rate</li>
+        <li><strong>Ability of product to release moisture</strong> — Hybrids differ due to seed morphology differences</li>
+      </ul>
+    </div>
+
+    <div class="content-card">
+      <h3>Effect of Temperature on Drying Rate</h3>
+      <p>Seed dries slower at 35°C compared to 43°C. Drying rate increases with higher temperature.</p>
+      <div class="formula-box">
+        <strong>At 35°C:</strong> HRPT = 21.48 − 0.7130 × HARMST + 0.007278 × HARMST²<br><br>
+        <strong>At 43°C:</strong> HRPT = 7.542 − 0.1854 × HARMST + 0.001539 × HARMST²
+      </div>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-label">Critical Warning</div>
+      <p>High drying rates, especially at high seed moisture content, can damage seed. Potential drying rate is faster with higher initial seed moisture, but this does not mean it should be used aggressively.</p>
+    </div>
+
+    <div class="quiz-container" data-quiz="q5">
+      <div class="quiz-header"><h3>Knowledge Check — Calculation</h3><span class="quiz-counter">Q 5 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">If seed corn is dried from 38% moisture to 13% moisture in 100 hours, what is the drying rate?</div>
+        <div style="margin:16px 0;">
+          <label class="drop-label">Your Answer:</label>
+          <input type="text" class="fill-blank-input" id="fill1" style="width:120px;" placeholder="___"> hours/point
+        </div>
+        <div class="quiz-actions"><button class="btn btn-primary" onclick="checkFillBlank('fill1', ['4','4.0'], 'q5')">Submit</button></div>
+        <div class="quiz-feedback correct" id="q5-correct"><strong>Correct</strong>100 / (38 − 13) = 100 / 25 = 4.0 hours per point. This meets the "Sensitive" category minimum.</div>
+        <div class="quiz-feedback incorrect" id="q5-incorrect"><strong>Not quite</strong>100 hours / (38% − 13%) = 100 / 25 = <strong>4.0 hours per point</strong>.</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q6">
+      <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 6 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">Which would ACCELERATE the drying rate? (Select all that apply)</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="true" onclick="selectMultiOption(this)"><span class="option-marker">A</span><span class="option-text">Higher air temperature</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectMultiOption(this)"><span class="option-marker">B</span><span class="option-text">Higher relative humidity</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectMultiOption(this)"><span class="option-marker">C</span><span class="option-text">Faster airflow rate</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectMultiOption(this)"><span class="option-marker">D</span><span class="option-text">Lower relative humidity</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>Higher temperature, faster airflow, and lower RH all accelerate drying.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>Higher temperature, faster airflow, and lower RH accelerate drying. Higher RH actually slows drying.</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q7">
+      <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 7 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">What is the minimum drying rate goal for "Sensitive" seed?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">3.0 hours per point</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">3.5 hours per point</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">4.0 hours per point</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">5.0 hours per point</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>The "Sensitive" category has a minimum of 4.0 hours per point — the most gentle rate.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>"Least Sensitive" = 3.0, "Moderately Sensitive" = 3.5, "Sensitive" = 4.0 hours per point.</div>
+      </div>
+    </div>
+
+    <div class="section-nav"><button class="btn btn-secondary" onclick="goToSection(1)">← Previous</button><button class="btn btn-primary" onclick="goToSection(3)">Next: Air Properties →</button></div>
+  </div>
+
+  <!-- ═══ SECTION 3 ═══ -->
+  <div class="section" id="section-3">
+    <div class="section-header">
+      <div class="section-number">Section 04</div>
+      <h2 class="section-title">Air Temperature &amp; Relative Humidity</h2>
+      <p class="section-subtitle">Understanding how air properties drive the drying process.</p>
+    </div>
+
+    <div class="content-card">
+      <h3>Air Temperature</h3>
+      <ul>
+        <li><strong>Inlet Temperature (dry bulb temperature):</strong> The higher the temperature, the faster the drying rate</li>
+        <li>Down air — not to exceed <strong>110°F (43°C)</strong></li>
+        <li>Up air — not to exceed <strong>100°F (38°C)</strong></li>
+      </ul>
+    </div>
+
+    <div class="content-card">
+      <h3>Relative Humidity</h3>
+      <p>Relative humidity is <strong>the ratio of the amount of water vapor in the air to the amount of water vapor when saturated at the same temperature</strong>, expressed in percentage (%).</p>
+      <div class="callout" style="margin-top:16px;">
+        <div class="callout-label">Fundamental Principle</div>
+        <p>The potential of air holding water <strong>increases with an increase in temperature</strong>.</p>
+      </div>
+    </div>
+
+    <div class="content-card">
+      <h3>What Happens When Inlet Temperature Increases</h3>
+      <ul>
+        <li>Water molecules in corn kernels get energized</li>
+        <li>Relative humidity decreases</li>
+      </ul>
+      <p>When both happen, water moves from inside the kernels into the air.</p>
+      <div class="callout info" style="margin-top:16px;">
+        <div class="callout-label">Psychrometric Example</div>
+        <p>If the temperature increases from 25°C to 35°C at 50% RH, the RH will decrease to 28% at sea level.</p>
+      </div>
+    </div>
+
+    <div class="content-card">
+      <h3>Temperature &amp; RH Targets (Double Pass Reversing Dryers)</h3>
+      <h4 style="margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:var(--brand-green-dark);text-transform:uppercase;">Temperate Conditions</h4>
+      <div class="data-table-wrap" style="margin-top:8px;">
+        <table class="data-table">
+          <thead><tr><th>Parameter</th><th>Target</th></tr></thead>
+          <tbody>
+            <tr><td>Lower Tunnel RH</td><td>25 – 30%</td></tr>
+            <tr><td>Upper Tunnel RH</td><td>15 – 20%</td></tr>
+            <tr><td>Lower Tunnel Temp</td><td>Min 35°C/95°F; Max per quality manual</td></tr>
+            <tr><td>Upper Tunnel Temp</td><td>Min to meet lower tunnel temp; Max 43°C/110°F</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 style="margin-top:24px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:var(--brand-green-dark);text-transform:uppercase;">Tropical Conditions</h4>
+      <ul style="margin-top:8px;">
+        <li>Adjust temperatures to reflect ambient air conditions (wet bulb)</li>
+        <li>If RH is low, temperature should be reduced</li>
+        <li>If RH is high, temperature may need to be increased</li>
+        <li>For every degree of wet bulb above 25°C/77°F, dry bulb can increase by 1°C/2°F — up to max 40°C/104°F (up air) and 46°C/115°F (down air)</li>
+      </ul>
+    </div>
+
+    <div class="quiz-container" data-quiz="q8">
+      <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 8 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">What is the maximum inlet temperature allowed for UP AIR?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">110°F (43°C)</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">100°F (38°C)</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">95°F (35°C)</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">115°F (46°C)</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>Up air must not exceed 100°F (38°C). Down air must not exceed 110°F (43°C).</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>The maximum for up air is 100°F (38°C). The 110°F (43°C) limit applies to down air.</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q9">
+      <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 9 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">When inlet air temperature increases, what two things happen?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">Water molecules slow down and RH increases</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">Water molecules get energized and RH decreases</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">Air pressure increases and airflow decreases</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">Kernel temperature decreases and surface moisture increases</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>Water molecules get energized AND RH decreases. Both effects drive moisture out of the kernels.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>The correct answer is: water molecules get energized AND RH decreases.</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q10">
+      <div class="quiz-header"><h3>Knowledge Check — Tropical</h3><span class="quiz-counter">Q 10 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">For every degree of wet bulb above 25°C, dry bulb can increase by how much?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">2°C / 4°F</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">1°C / 2°F</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">0.5°C / 1°F</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">3°C / 5°F</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>1°C/2°F per degree of wet bulb above 25°C, up to max 40°C (up air) and 46°C (down air).</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>The correct answer is 1°C/2°F per degree of wet bulb above 25°C.</div>
+      </div>
+    </div>
+
+    <div class="section-nav"><button class="btn btn-secondary" onclick="goToSection(2)">← Previous</button><button class="btn btn-primary" onclick="goToSection(4)">Next: Quality Plan →</button></div>
+  </div>
+
+  <!-- ═══ SECTION 4 ═══ -->
+  <div class="section" id="section-4">
+    <div class="section-header">
+      <div class="section-number">Section 05</div>
+      <h2 class="section-title">Quality Plan Guidelines &amp; Reversal Decisions</h2>
+      <p class="section-subtitle">Managing dryer parameters based on seed sensitivity, moisture, and air direction.</p>
+    </div>
+
+    <div class="content-card">
+      <h3>Quality Plan Overview</h3>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Sensitivity</th><th>Harvest Moisture</th><th>Drying Management</th><th>Rate Goal</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Least Sensitive</strong></td><td>&gt; 32%</td><td>43°C MAX Down, 38°C MAX Up, 60% Up MIN</td><td>Min 3.0</td></tr>
+            <tr><td><strong>Moderately Sensitive</strong></td><td>≤ 32%</td><td>43°C MAX Down, 38°C MAX Up, See reversal chart</td><td>Min 3.5</td></tr>
+            <tr><td><strong>Moderately Sensitive</strong></td><td>&gt; 32%</td><td>43°C MAX Down, 38°C MAX Up, 60% Up MIN</td><td>Min 3.5</td></tr>
+            <tr><td><strong>Sensitive</strong></td><td>≤ 32%</td><td>43°C MAX Down, 38°C MAX Up, See reversal chart</td><td>Min 4.0</td></tr>
+            <tr><td><strong>Sensitive</strong></td><td>&gt; 32%</td><td>43°C MAX Down, 38°C MAX Up, 60% Up MIN</td><td>Min 4.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout" style="margin-top:16px;">
+        <div class="callout-label">Important Notes</div>
+        <p><strong>Least and Moderately Sensitive only:</strong> For every degree above a 25 degree wet bulb, temperature can increase one degree, up to max 40°C (up) and 46°C (down).</p>
+        <p style="margin-top:8px;"><strong>When harvest moisture is under 22%,</strong> disregard up air percentages.</p>
+      </div>
+    </div>
+
+    <div class="content-card">
+      <h3>Reverse Air / Shelling Decisions</h3>
+      <h4 style="margin-top:16px;font-size:1rem;color:var(--brand-green-dark);">When to Reverse Air:</h4>
+      <ul>
+        <li>More than 50% of the total drying cycle needs to be completed</li>
+        <li>Safe to reverse air at 25% corn moisture or less</li>
+      </ul>
+      <h4 style="margin-top:16px;font-size:1rem;color:var(--brand-green-dark);">When to Start Shelling:</h4>
+      <ul>
+        <li>Target of 12.5% corn kernel moisture</li>
+        <li>Consult the local quality plan</li>
+      </ul>
+    </div>
+
+    <div class="content-card">
+      <h3>Alternative Reversal Calculations (Harvest Moisture ≤ 32%)</h3>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Front Time (hrs)</th><th>Harvest Moist. (%)</th><th>Target Reversal (%)</th><th>Up-Air (hrs)</th><th>% Up-air</th></tr></thead>
+          <tbody>
+            <tr><td>10</td><td>32</td><td>25</td><td>38</td><td>50%</td></tr>
+            <tr><td>10</td><td>30</td><td>25</td><td>30</td><td>40%</td></tr>
+            <tr><td>10</td><td>28</td><td>25</td><td>22</td><td>35%</td></tr>
+            <tr><td>10</td><td>25</td><td>25</td><td>10</td><td>20%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q11">
+      <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 11 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">When is it safe to reverse air direction in a double pass reversing dryer?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">After 25% of the drying cycle</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">After &gt;50% of the cycle, at ≤25% corn moisture</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">At any time during drying</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">Only at 12.5% moisture</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>Two conditions: &gt;50% of cycle completed, AND corn moisture ≤25%.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>&gt;50% of cycle completed AND corn moisture at 25% or less. The 12.5% target is for shelling, not reversing.</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q12">
+      <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 12 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">What is the target kernel moisture for starting shelling?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">15.0%</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">14.0%</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">12.5%</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">10.0%</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>Target is 12.5% corn kernel moisture. Always consult the local quality plan.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>The target is 12.5%: "Start Shelling — Target of 12.5% corn kernel moisture."</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q13">
+      <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 13 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">Per the reversal chart, at 28% harvest moisture with a 10-hour front time, what % up-air is recommended?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">50%</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">40%</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">35%</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">20%</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>At 28% harvest moisture: up-air = 22 hours, 35% of total time.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>The table shows: at 28% harvest moisture, up-air percentage is 35% (22 hours, target reversal at 25%).</div>
+      </div>
+    </div>
+
+    <div class="section-nav"><button class="btn btn-secondary" onclick="goToSection(3)">← Previous</button><button class="btn btn-primary" onclick="goToSection(5)">Next: Airflow →</button></div>
+  </div>
+
+  <!-- ═══ SECTION 5 ═══ -->
+  <div class="section" id="section-5">
+    <div class="section-header">
+      <div class="section-number">Section 06</div>
+      <h2 class="section-title">Airflow Rate &amp; The Drying Front</h2>
+      <p class="section-subtitle">How airflow affects drying patterns and overall uniformity.</p>
+    </div>
+
+    <div class="content-card">
+      <h3>Airflow Rate</h3>
+      <p>Expressed as <strong>cubic meters of air per minute per cubic meter of corn</strong>.</p>
+      <ul>
+        <li>Higher airflow = faster drying — up to a point</li>
+        <li>At lower seed moisture, the effect becomes less influential</li>
+        <li>Minimum: <strong>10 m³/m³ ear corn/min</strong></li>
+      </ul>
+    </div>
+
+    <div class="content-card">
+      <h3>The Drying Front</h3>
+      <ul>
+        <li>The drying front is the <strong>leading edge of the drying zone</strong></li>
+        <li>It advances in the <strong>direction of air flow</strong></li>
+        <li>Greater airflow = faster front displacement & deeper drying zone</li>
+        <li>Slow displacement and incomplete overlapping of drying zones create <strong>variability in seed moisture</strong></li>
+      </ul>
+    </div>
+
+    <div class="content-card">
+      <h3>Assessing Drying Rates</h3>
+      <ul>
+        <li><strong>During drying</strong> — to manage the process</li>
+        <li><strong>Post-mortem</strong> (immediately after a bin is done) — to adjust future bins</li>
+        <li><strong>After the drying season</strong> — to evaluate efficiency</li>
+      </ul>
+    </div>
+
+    <div class="content-card">
+      <h3>What to Look For</h3>
+      <ul>
+        <li>Displacement of exhaust temperature from wet bulb temperature line</li>
+        <li>Amount of moisture removed</li>
+        <li>Total hours of drying time</li>
+        <li>Up air and down air inlet temperatures</li>
+        <li>Fill depth</li>
+        <li>Wet bulb temperature (starting point)</li>
+        <li>Air pressure</li>
+        <li>Drying sensitivity rating</li>
+      </ul>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-label">Case Study — Bin 306</div>
+      <h4>Fill Graph Analysis</h4>
+      <p style="margin-bottom:12px;"><strong>Material:</strong> 36B05-1002 | <strong>Fill Depth:</strong> 8.0 ft | <strong>Initial Moisture:</strong> 32.50% | <strong>Final Moisture:</strong> 12.6% | <strong>Sensitivity:</strong> Sensitive</p>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr><th></th><th>Inlet</th><th>Exhaust</th><th>Wet Bulb</th><th>Pressure</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Upair Avgs</strong></td><td>93.1°F</td><td>76.1°F</td><td>70.5°F</td><td>1.8</td></tr>
+            <tr><td><strong>Downair Avgs</strong></td><td>105.2°F</td><td>89.2°F</td><td>72.1°F</td><td>1.6</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px;"><strong>Total Drying Time:</strong> 86 hours</p>
+      <div class="formula-box" style="margin-top:8px;">Drying Rate = 86h / (32.6 − 12.6) = <strong>4.3 hours/point</strong></div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q14">
+      <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 14 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">What is the minimum airflow rate required?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">5 m³/m³ ear corn/min</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">10 m³/m³ ear corn/min</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">15 m³/m³ ear corn/min</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">20 m³/m³ ear corn/min</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>"Need 10m³/m³ ear corn/min (minimum)."</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>The minimum is 10 m³/m³ ear corn/min.</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q15">
+      <div class="quiz-header"><h3>Case Study Check</h3><span class="quiz-counter">Q 15 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">Bin 306 had a drying rate of 4.3 hours/point for sensitive seed. Does this meet the requirement?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">Yes — 4.3 exceeds the 4.0 minimum (slower = gentler)</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">No — rate should be exactly 4.0</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">No — 4.3 is below the minimum</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">Cannot be determined</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>4.3 > 4.0 minimum. A higher number means slower (gentler) drying — appropriate for sensitive seed.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>4.3 exceeds the 4.0 minimum. Higher hours/point = slower, gentler drying.</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q16">
+      <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 16 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">What causes variability in seed moisture during drying?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">Too high airflow rate</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">Slow displacement and incomplete overlapping of drying zones</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">Too low initial moisture</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">Using down air instead of up air</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>"Slow displacement and incomplete overlapping of drying zones create variability in seed moisture."</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>Variability is caused by slow displacement and incomplete overlapping of drying zones.</div>
+      </div>
+    </div>
+
+    <div class="section-nav"><button class="btn btn-secondary" onclick="goToSection(4)">← Previous</button><button class="btn btn-primary" onclick="goToSection(6)">Next: Best Practices →</button></div>
+  </div>
+
+  <!-- ═══ SECTION 6 ═══ -->
+  <div class="section" id="section-6">
+    <div class="section-header">
+      <div class="section-number">Section 07</div>
+      <h2 class="section-title">Rules for Avoiding Drying Injury &amp; Summary</h2>
+      <p class="section-subtitle">Practical rules to protect seed quality and comprehensive module summary.</p>
+    </div>
+
+    <div class="content-card">
+      <h3>Rules for Avoiding Drying Injury</h3>
+      <ul>
+        <li>Follow recommended drying rates and temperatures for a hybrid</li>
+        <li>Avoid filling dryer bins too full (&gt; 3 m)</li>
+        <li>Avoid shallow bins (&lt; 1 m)</li>
+        <li>Adjust dryer conditions as ambient air conditions change</li>
+        <li>When in doubt, seek advice</li>
+      </ul>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-label">When Is Seed Quality at Greatest Risk?</div>
+      <p>Seed quality is at greatest risk <strong>at the start of drying when seed moisture is still high</strong>. Quality is also at risk <strong>when airflow is reversed too soon</strong> and the drying front has not moved completely through the seed.</p>
+    </div>
+
+    <div class="content-card">
+      <h3>Module Summary</h3>
+      <ul>
+        <li><strong>Mechanical drying is necessary</strong> to preserve seed quality</li>
+        <li><strong>Seeds are hygroscopic</strong> — the basis for seed drying principles</li>
+        <li><strong>Drying rate is mainly influenced by:</strong> seed moisture, air temperature, relative humidity, and air flow rate</li>
+        <li><strong>The drying front and zone</strong> must move across the whole seed bed</li>
+        <li><strong>An aggressive drying rate</strong> can cause seed injury; <strong>a slow rate</strong> reduces throughput and can also contribute to poor quality</li>
+      </ul>
+    </div>
+
+    <div class="quiz-container" data-quiz="q17">
+      <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 17 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">What is the maximum recommended fill depth for dryer bins?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">1 meter</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">2 meters</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">3 meters (avoid filling above this)</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">5 meters</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>"Avoid filling dryer bins too full (>3 m)" and "Avoid shallow bins (<1 m)."</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>The threshold is >3 m maximum, <1 m minimum.</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q18">
+      <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 18 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">When during drying is seed quality at greatest risk?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">At the end when moisture is low</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">At the start when seed moisture is still high</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">During the middle of the cycle</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">During shelling</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>"Seed quality is at greatest risk during the start of drying when seed moisture is still high."</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>At the start of drying when seed moisture is still high.</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q19">
+      <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 19 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">Why can both too-fast AND too-slow drying be problematic?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">Too fast damages equipment; too slow wastes energy</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">Too fast causes seed injury; too slow reduces throughput and can also contribute to poor quality</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">Too fast causes mold; too slow causes overheating</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">Only too-fast is a problem; slower is always better</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>"An aggressive drying rate can cause seed injury; a slow drying rate reduces throughput and can also contribute to poor seed quality."</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>Both extremes are problematic per the module summary.</div>
+      </div>
+    </div>
+
+    <div class="section-nav"><button class="btn btn-secondary" onclick="goToSection(5)">← Previous</button><button class="btn btn-primary" onclick="goToSection(7)">Final Assessment →</button></div>
+  </div>
+
+  <!-- ═══ SECTION 7 ═══ -->
+  <div class="section" id="section-7">
+    <div class="section-header">
+      <div class="section-number">Section 08</div>
+      <h2 class="section-title">Final Assessment</h2>
+      <p class="section-subtitle">Comprehensive review of all seed corn drying principles.</p>
+    </div>
+
+    <div class="quiz-container" data-quiz="q20">
+      <div class="quiz-header"><h3>Final Assessment</h3><span class="quiz-counter">Q 20 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">Which is the correct formula for calculating drying rate?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">Initial Moisture / Total Hours</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">Total Hours / (Initial Moisture% − Final Moisture%)</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">Air Temperature × Airflow Rate</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">Final Moisture / Points Removed</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>Hours / Points Removed = e.g. 69/(35−12) = 3.0 hours/point.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>Total Hours / (Initial% − Final%).</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q21">
+      <div class="quiz-header"><h3>Final Assessment</h3><span class="quiz-counter">Q 21 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">What happens to RH when air temperature increases (no added moisture)?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">RH increases</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">RH decreases</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">RH stays the same</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">RH fluctuates randomly</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>At 25°C/50%RH, increasing to 35°C drops RH to 28%.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>RH decreases. From 50% at 25°C down to 28% at 35°C.</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q22">
+      <div class="quiz-header"><h3>Final Assessment</h3><span class="quiz-counter">Q 22 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">When should drying rates be assessed? (Select all)</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="true" onclick="selectMultiOption(this)"><span class="option-marker">A</span><span class="option-text">During drying — to manage the process</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectMultiOption(this)"><span class="option-marker">B</span><span class="option-text">Post-mortem — immediately after a bin completes</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectMultiOption(this)"><span class="option-marker">C</span><span class="option-text">After the drying season — to evaluate efficiency</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectMultiOption(this)"><span class="option-marker">D</span><span class="option-text">Only at the beginning of the season</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>All three: during drying, post-mortem per bin, and after the season.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>All three active options are correct.</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q23">
+      <div class="quiz-header"><h3>Final Assessment</h3><span class="quiz-counter">Q 23 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">Why does airflow rate become less influential at lower seed moisture?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">The dryer automatically reduces airflow</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">Less moisture remains to remove, making the process naturally slower regardless of airflow</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">Low moisture seeds are immune to airflow</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">Airflow only matters in tropical conditions</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>At lower moisture, the remaining moisture is harder to extract, diminishing the marginal effect of increased airflow.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>Less moisture remains, so the effect of increasing airflow becomes marginal.</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q24">
+      <div class="quiz-header"><h3>Final Assessment</h3><span class="quiz-counter">Q 24 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">True or False: Seed with higher initial moisture releases moisture more easily.</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">T</span><span class="option-text">True</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">F</span><span class="option-text">False</span></div>
+        </div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>"Seed with a higher moisture release moisture easier" and "Seeds are able to release this moisture easier."</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>This is TRUE. "Seed with a higher moisture release moisture easier."</div>
+      </div>
+    </div>
+
+    <div class="quiz-container" data-quiz="q25">
+      <div class="quiz-header"><h3>Final Assessment</h3><span class="quiz-counter">Q 25 of 25</span></div>
+      <div class="quiz-body">
+        <div class="quiz-question">Match each sensitivity level with its minimum hours-per-point requirement:</div>
+        <div style="margin:20px 0;">
+          <div class="drop-label">Click items to assign to slots:</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+            <div>
+              <div class="drop-label">Sensitivity Levels</div>
+              <div id="sortable-items" style="display:flex;flex-direction:column;gap:8px;">
+                <div class="drag-item" data-answer="3.0" onclick="cycleMatch(this)">Least Sensitive</div>
+                <div class="drag-item" data-answer="3.5" onclick="cycleMatch(this)">Moderately Sensitive</div>
+                <div class="drag-item" data-answer="4.0" onclick="cycleMatch(this)">Sensitive</div>
+              </div>
+            </div>
+            <div>
+              <div class="drop-label">Hours Per Point</div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div class="drop-slot" data-value="3.0">3.0 hours/point</div>
+                <div class="drop-slot" data-value="3.5">3.5 hours/point</div>
+                <div class="drop-slot" data-value="4.0">4.0 hours/point</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="quiz-actions"><button class="btn btn-primary" onclick="checkMatching()">Check Matching</button></div>
+        <div class="quiz-feedback correct" id="q25-correct"><strong>Correct</strong>Least Sensitive = 3.0, Moderately Sensitive = 3.5, Sensitive = 4.0. More sensitive seed needs slower drying.</div>
+        <div class="quiz-feedback incorrect" id="q25-incorrect"><strong>Not quite</strong>Least → 3.0, Moderate → 3.5, Sensitive → 4.0.</div>
+      </div>
+    </div>
+
+    <div class="score-panel" id="finalScorePanel" style="display:none;">
+      <h2>Stellar Seeds — Training Complete</h2>
+      <div class="score-number" id="finalScoreNumber">0 / 25</div>
+      <div class="score-detail" id="finalScoreDetail">Questions answered correctly</div>
+      <div class="score-message" id="finalScoreMessage"></div>
+    </div>
+
+    <div class="section-nav">
+      <button class="btn btn-secondary" onclick="goToSection(6)">← Previous</button>
+      <button class="btn btn-primary" onclick="showFinalScore()">View Final Score</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let currentSection = 0;
+  let totalAnswered = 0;
+  let totalCorrect = 0;
+  const totalQuestions = 25;
+  const answeredQuestions = new Set();
+
+  function goToSection(idx) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('section-' + idx).classList.add('active');
+    document.querySelector(`.nav-tab[data-section="${idx}"]`).classList.add('active');
+    currentSection = idx;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', () => goToSection(parseInt(tab.dataset.section)));
+  });
+
+  function selectOption(el) {
+    const container = el.closest('.quiz-container');
+    const qId = container.dataset.quiz;
+    if (answeredQuestions.has(qId)) return;
+    const options = container.querySelectorAll('.quiz-option');
+    const isCorrect = el.dataset.correct === 'true';
+    options.forEach(opt => {
+      opt.classList.add('disabled');
+      if (opt.dataset.correct === 'true') opt.classList.add('correct');
+    });
+    el.classList.add('selected');
+    if (!isCorrect) el.classList.add('incorrect');
+    const feedbacks = container.querySelectorAll('.quiz-feedback');
+    if (isCorrect) { feedbacks[0].classList.add('show'); totalCorrect++; }
+    else { feedbacks[1].classList.add('show'); }
+    answeredQuestions.add(qId);
+    totalAnswered++;
+    updateProgress();
+  }
+
+  function selectMultiOption(el) {
+    const container = el.closest('.quiz-container');
+    const qId = container.dataset.quiz;
+    if (answeredQuestions.has(qId)) return;
+    el.classList.toggle('selected');
+    const selected = container.querySelectorAll('.quiz-option.selected');
+    if (selected.length >= 2) setTimeout(() => gradeMultiSelect(container), 400);
+  }
+
+  function gradeMultiSelect(container) {
+    const qId = container.dataset.quiz;
+    if (answeredQuestions.has(qId)) return;
+    const options = container.querySelectorAll('.quiz-option');
+    let allCorrect = true;
+    options.forEach(opt => {
+      opt.classList.add('disabled');
+      const shouldBe = opt.dataset.correct === 'true';
+      const isSelected = opt.classList.contains('selected');
+      if (shouldBe) { opt.classList.add('correct'); if (!isSelected) allCorrect = false; }
+      if (isSelected && !shouldBe) { opt.classList.add('incorrect'); allCorrect = false; }
+    });
+    const feedbacks = container.querySelectorAll('.quiz-feedback');
+    if (allCorrect) { feedbacks[0].classList.add('show'); totalCorrect++; }
+    else { feedbacks[1].classList.add('show'); }
+    answeredQuestions.add(qId);
+    totalAnswered++;
+    updateProgress();
+  }
+
+  function checkFillBlank(inputId, accepted, feedbackId) {
+    const input = document.getElementById(inputId);
+    const val = input.value.trim().toLowerCase();
+    const container = input.closest('.quiz-container');
+    const qId = container.dataset.quiz;
+    if (answeredQuestions.has(qId)) return;
+    const isCorrect = accepted.some(a => val === a.toLowerCase());
+    if (isCorrect) {
+      input.style.borderBottomColor = 'var(--brand-green-mid)';
+      document.getElementById(feedbackId + '-correct').classList.add('show');
+      totalCorrect++;
+    } else {
+      input.style.borderBottomColor = 'var(--red)';
+      document.getElementById(feedbackId + '-incorrect').classList.add('show');
+    }
+    input.disabled = true;
+    answeredQuestions.add(qId);
+    totalAnswered++;
+    updateProgress();
+  }
+
+  let currentDragItem = null;
+  function cycleMatch(el) {
+    const qId = el.closest('.quiz-container').dataset.quiz;
+    if (answeredQuestions.has(qId)) return;
+    if (currentDragItem === el) { el.classList.remove('selected'); currentDragItem = null; return; }
+    document.querySelectorAll('#sortable-items .drag-item').forEach(d => d.classList.remove('selected'));
+    el.classList.add('selected');
+    currentDragItem = el;
+    const slots = document.querySelectorAll('.drop-slot');
+    for (const slot of slots) {
+      if (!slot.classList.contains('filled')) {
+        slot.textContent = el.textContent;
+        slot.classList.add('filled');
+        el.classList.add('placed');
+        currentDragItem = null;
+        el.classList.remove('selected');
+        break;
+      }
+    }
+  }
+
+  function checkMatching() {
+    const qId = 'q25';
+    if (answeredQuestions.has(qId)) return;
+    const items = document.querySelectorAll('#sortable-items .drag-item');
+    const slots = document.querySelectorAll('.drop-slot');
+    let allCorrect = true;
+    items.forEach((item, idx) => {
+      if (slots[idx].dataset.value !== item.dataset.answer) allCorrect = false;
+    });
+    if (allCorrect) {
+      document.getElementById('q25-correct').classList.add('show');
+      totalCorrect++;
+    } else {
+      document.getElementById('q25-incorrect').classList.add('show');
+      items.forEach((item, idx) => { slots[idx].textContent = item.dataset.answer + ' hours/point'; });
+    }
+    answeredQuestions.add(qId);
+    totalAnswered++;
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const pct = Math.round((totalAnswered / totalQuestions) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = pct + '%';
+    document.getElementById('scoreDisplay').textContent = `Score: ${totalCorrect} / ${totalAnswered}`;
+  }
+
+  function showFinalScore() {
+    const panel = document.getElementById('finalScorePanel');
+    panel.style.display = 'block';
+    document.getElementById('finalScoreNumber').textContent = `${totalCorrect} / ${totalQuestions}`;
+    const pct = Math.round((totalCorrect / totalQuestions) * 100);
+    let msg = '';
+    if (pct >= 90) msg = 'Outstanding! You have mastered Stellar Seeds\' seed corn drying principles.';
+    else if (pct >= 70) msg = 'Good work! Review missed areas to strengthen your expertise.';
+    else if (pct >= 50) msg = 'Foundational knowledge in place. Review lessons and retake the assessment.';
+    else msg = 'Additional study recommended. Review all training sections before practical application.';
+    document.getElementById('finalScoreMessage').textContent = msg;
+    panel.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  updateProgress();
+</script>
+
+</body>
+</html>
