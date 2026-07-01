@@ -5,599 +5,377 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stellar Seeds — Seed Corn Drying Training</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --brand-green-deep: #0a3d2e;
-    --brand-green-dark: #0f5138;
-    --brand-green: #146b4a;
-    --brand-green-mid: #1a8a5e;
-    --brand-green-light: #34a873;
-    --brand-green-pale: #e6f5ee;
-    --brand-gold: #d4a843;
-    --brand-gold-light: #f0d080;
-    --brand-gold-dark: #b08830;
-    --brand-cream: #f9f6ef;
-    --brand-cream-deep: #eee9dc;
-    --bg: var(--brand-cream);
-    --surface: #fffdf8;
-    --accent: var(--brand-gold);
-    --accent-dark: var(--brand-gold-dark);
-    --accent-light: var(--brand-gold-light);
-    --green: var(--brand-green-mid);
-    --green-light: var(--brand-green-pale);
-    --red: #c0392b;
-    --red-light: #fdecea;
-    --text-primary: #1a1612;
-    --text-secondary: #4a4035;
-    --text-muted: #8a7e6e;
-    --border: #d6cfc0;
-    --shadow: rgba(10,61,46,0.08);
-    --radius: 12px;
-  }
-
-  *{margin:0;padding:0;box-sizing:border-box;}
-
-  body{
-    font-family:'Source Serif 4',Georgia,serif;
-    background:var(--bg);color:var(--text-primary);
-    line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased;
-  }
-
-  body::before{
-    content:'';position:fixed;inset:0;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events:none;z-index:9999;
-  }
-
-  .top-bar{
-    position:fixed;top:0;left:0;right:0;height:56px;
-    background:var(--brand-green-deep);color:#fff;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:0 32px;z-index:1000;
-    font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.03em;
-  }
-
-  .top-bar .logo-area{display:flex;align-items:center;gap:14px;}
-
-  .top-bar .logo-mark{
-    width:32px;height:32px;background:var(--brand-gold);border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    font-family:'DM Serif Display',serif;font-size:16px;color:var(--brand-green-deep);
-  }
-
-  .top-bar .logo-text{font-weight:600;letter-spacing:0.06em;}
-
-  .progress-container{display:flex;align-items:center;gap:12px;}
-
-  .progress-bar-bg{
-    width:200px;height:6px;background:rgba(255,255,255,0.2);
-    border-radius:3px;overflow:hidden;
-  }
-
-  .progress-bar-fill{
-    height:100%;background:var(--brand-gold);border-radius:3px;
-    width:0%;transition:width 0.6s cubic-bezier(0.25,1,0.5,1);
-  }
-
-  .progress-label{opacity:0.85;font-size:12px;}
-
-  .score-badge{
-    background:rgba(212,168,67,0.25);padding:4px 14px;
-    border-radius:20px;font-weight:600;color:var(--brand-gold-light);
-  }
-
-  /* ── Audio Controls ── */
-  .audio-bar{
-    position:fixed;top:56px;left:0;right:0;height:44px;
-    background:var(--brand-green-dark);
-    display:flex;align-items:center;justify-content:center;gap:16px;
-    z-index:1000;border-bottom:1px solid rgba(255,255,255,0.1);
-    padding:0 24px;
-    font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(255,255,255,0.85);
-  }
-
-  .audio-btn{
-    background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);
-    color:#fff;padding:6px 16px;border-radius:6px;cursor:pointer;
-    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;
-    font-weight:600;transition:all 0.2s ease;display:flex;align-items:center;gap:6px;
-  }
-
-  .audio-btn:hover{background:rgba(255,255,255,0.22);letter-spacing:0.06em;}
-
-  .audio-btn.active{
-    background:var(--brand-gold);color:var(--brand-green-deep);border-color:var(--brand-gold);
-  }
-
-  .audio-status{
-    font-size:11px;color:var(--brand-gold-light);opacity:0.8;
-    min-width:180px;text-align:center;
-  }
-
-  .volume-slider{
-    -webkit-appearance:none;appearance:none;
-    width:80px;height:4px;border-radius:2px;
-    background:rgba(255,255,255,0.2);outline:none;cursor:pointer;
-  }
-
-  .volume-slider::-webkit-slider-thumb{
-    -webkit-appearance:none;width:14px;height:14px;
-    border-radius:50%;background:var(--brand-gold);cursor:pointer;
-  }
-
-  .voice-select{
-    background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
-    color:#fff;padding:4px 8px;border-radius:4px;
-    font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;max-width:140px;
-  }
-
-  .voice-select option{background:var(--brand-green-deep);color:#fff;}
-
-  .speed-select{
-    background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
-    color:#fff;padding:4px 8px;border-radius:4px;
-    font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;width:60px;
-  }
-
-  .speed-select option{background:var(--brand-green-deep);color:#fff;}
-
-  /* ── Hero ── */
-  .hero{
-    margin-top:100px;
-    background:linear-gradient(135deg,var(--brand-green-deep) 0%,var(--brand-green-dark) 40%,var(--brand-green) 100%);
-    color:#fff;padding:100px 40px 80px;position:relative;overflow:hidden;
-  }
-
-  .hero::before{
-    content:'';position:absolute;top:-40%;right:-10%;
-    width:500px;height:500px;
-    background:radial-gradient(circle,rgba(212,168,67,0.12) 0%,transparent 65%);
-    pointer-events:none;
-  }
-
-  .hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:1;}
-
-  .hero-badge{
-    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;
-    text-transform:uppercase;background:rgba(212,168,67,0.15);
-    display:inline-block;padding:6px 16px;border-radius:4px;
-    margin-bottom:24px;border:1px solid rgba(212,168,67,0.25);color:var(--brand-gold-light);
-  }
-
-  .hero h1{
-    font-family:'DM Serif Display',serif;
-    font-size:clamp(2.4rem,5vw,3.6rem);font-weight:400;line-height:1.15;margin-bottom:8px;
-  }
-
-  .hero h1 .brand-name{color:var(--brand-gold);}
-
-  .hero .hero-tagline{
-    font-family:'DM Serif Display',serif;font-size:clamp(1.1rem,2.2vw,1.4rem);
-    color:var(--brand-gold-light);opacity:0.9;margin-bottom:20px;font-style:italic;
-  }
-
-  .hero p{font-size:1.1rem;opacity:0.75;max-width:580px;line-height:1.8;}
-
-  .hero-stats{display:flex;gap:40px;margin-top:48px;flex-wrap:wrap;}
-
-  .hero-stat .num{
-    font-family:'DM Serif Display',serif;font-size:2.2rem;display:block;color:var(--brand-gold);
-  }
-
-  .hero-stat .label{
-    font-size:0.85rem;opacity:0.6;text-transform:uppercase;
-    letter-spacing:0.08em;font-family:'JetBrains Mono',monospace;
-  }
-
-  .nav-sticky{
-    position:sticky;top:100px;z-index:999;background:var(--surface);
-    border-bottom:1px solid var(--border);overflow-x:auto;
-  }
-
-  .nav-tabs{display:flex;max-width:1100px;margin:0 auto;padding:0 24px;}
-
-  .nav-tab{
-    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.04em;
-    padding:16px 20px;cursor:pointer;white-space:nowrap;
-    border-bottom:3px solid transparent;color:var(--text-muted);
-    transition:all 0.25s ease;user-select:none;
-  }
-
-  .nav-tab:hover{color:var(--text-primary);}
-
-  .nav-tab.active{
-    color:var(--brand-green-dark);border-bottom-color:var(--brand-green);font-weight:600;
-  }
-
-  .nav-tab .tab-icon{margin-right:6px;font-size:14px;}
-
-  .main-container{max-width:1100px;margin:0 auto;padding:0 24px 100px;}
-
-  .section{display:none;animation:fadeInSection 0.5s ease forwards;}
-  .section.active{display:block;}
-
-  @keyframes fadeInSection{
-    from{opacity:0;transform:translateY(16px);}
-    to{opacity:1;transform:translateY(0);}
-  }
-
-  .section-header{padding:56px 0 32px;}
-
-  .section-number{
-    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--brand-green-dark);
-    letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;
-  }
-
-  .section-title{
-    font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,3.5vw,2.4rem);
-    font-weight:400;color:var(--text-primary);margin-bottom:12px;
-  }
-
-  .section-subtitle{font-size:1.05rem;color:var(--text-muted);max-width:640px;}
-
-  .content-card{
-    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-    padding:36px 40px;margin-bottom:24px;
-    box-shadow:0 2px 12px var(--shadow);transition:box-shadow 0.3s ease;
-  }
-
-  .content-card:hover{box-shadow:0 4px 24px rgba(10,61,46,0.12);}
-
-  .content-card h3{
-    font-family:'DM Serif Display',serif;font-size:1.35rem;
-    margin-bottom:16px;color:var(--text-primary);
-  }
-
-  .content-card p{color:var(--text-secondary);margin-bottom:12px;}
-
-  .content-card ul{list-style:none;padding:0;}
-
-  .content-card ul li{
-    padding:8px 0 8px 28px;position:relative;color:var(--text-secondary);
-  }
-
-  .content-card ul li::before{
-    content:'✓';position:absolute;left:0;color:var(--brand-green-mid);
-    font-weight:700;font-size:0.9em;
-  }
-
-  .read-card-btn{
-    display:inline-flex;align-items:center;gap:6px;
-    font-family:'JetBrains Mono',monospace;font-size:11px;
-    letter-spacing:0.04em;padding:6px 14px;
-    border:1px solid var(--brand-green);border-radius:6px;
-    background:transparent;color:var(--brand-green-dark);
-    cursor:pointer;transition:all 0.2s ease;margin-bottom:16px;
-  }
-
-  .read-card-btn:hover{background:var(--brand-green-pale);letter-spacing:0.06em;}
-
-  .read-card-btn.reading{
-    background:var(--brand-green);color:#fff;
-    animation:pulse-reading 1.5s ease-in-out infinite;
-  }
-
-  @keyframes pulse-reading{
-    0%,100%{opacity:1;}
-    50%{opacity:0.7;}
-  }
-
-  .content-card.speaking{
-    border-color:var(--brand-green);
-    box-shadow:0 0 0 3px rgba(26,138,94,0.15),0 4px 24px rgba(10,61,46,0.12);
-    transition:all 0.3s ease;
-  }
-
-  .content-card.speaking h3{color:var(--brand-green-dark);}
-
-  /* ── Highlight current list item being read ── */
-  .content-card ul li.reading-now{
-    background:rgba(26,138,94,0.08);
-    border-radius:4px;
-    padding-left:32px;
-    transition:all 0.3s ease;
-  }
-
-  .content-card p.reading-now{
-    background:rgba(26,138,94,0.08);
-    border-radius:4px;
-    padding:4px 8px;
-    margin-left:-8px;margin-right:-8px;
-    transition:all 0.3s ease;
-  }
-
-  .content-card h3.reading-now{
-    background:rgba(26,138,94,0.08);
-    border-radius:4px;
-    padding:4px 8px;
-    margin-left:-8px;margin-right:-8px;
-    transition:all 0.3s ease;
-  }
-
-  .callout{
-    border-left:4px solid var(--brand-green);
-    background:linear-gradient(90deg,rgba(20,107,74,0.06) 0%,transparent 100%);
-    padding:20px 24px;border-radius:0 var(--radius) var(--radius) 0;margin:20px 0;
-  }
-
-  .callout.info{
-    border-left-color:var(--brand-green-light);
-    background:linear-gradient(90deg,rgba(52,168,115,0.06) 0%,transparent 100%);
-  }
-
-  .callout.warning{
-    border-left-color:var(--red);
-    background:linear-gradient(90deg,rgba(192,57,43,0.06) 0%,transparent 100%);
-  }
-
-  .callout .callout-label{
-    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;
-    text-transform:uppercase;color:var(--brand-green-dark);margin-bottom:6px;font-weight:600;
-  }
-
-  .callout.info .callout-label{color:var(--brand-green-light);}
-  .callout.warning .callout-label{color:var(--red);}
-
-  .formula-box{
-    background:var(--brand-cream-deep);border:1px solid var(--border);
-    border-radius:var(--radius);padding:24px 28px;margin:20px 0;
-    font-family:'JetBrains Mono',monospace;font-size:14px;
-    color:var(--text-primary);line-height:2;overflow-x:auto;
-  }
-
-  .data-table-wrap{overflow-x:auto;margin:20px 0;border-radius:var(--radius);border:1px solid var(--border);}
-
-  .data-table{width:100%;border-collapse:collapse;font-size:14px;}
-
-  .data-table thead{
-    background:var(--brand-green-dark);color:#fff;
-    font-family:'JetBrains Mono',monospace;font-size:12px;
-    letter-spacing:0.05em;text-transform:uppercase;
-  }
-
-  .data-table th{padding:14px 16px;text-align:left;font-weight:600;}
-
-  .data-table td{
-    padding:12px 16px;border-bottom:1px solid var(--border);color:var(--text-secondary);
-  }
-
-  .data-table tbody tr:nth-child(even){background:var(--brand-cream-deep);}
-  .data-table tbody tr:hover{background:rgba(20,107,74,0.06);}
-
-  .quiz-container{
-    background:var(--surface);border:2px solid var(--brand-green);
-    border-radius:var(--radius);margin:40px 0;overflow:hidden;
-    box-shadow:0 4px 24px rgba(10,61,46,0.1);
-  }
-
-  .quiz-header{
-    background:linear-gradient(135deg,var(--brand-green-deep),var(--brand-green-dark));
-    color:#fff;padding:20px 32px;display:flex;align-items:center;justify-content:space-between;
-  }
-
-  .quiz-header h3{font-family:'DM Serif Display',serif;font-size:1.2rem;font-weight:400;}
-
-  .quiz-counter{
-    font-family:'JetBrains Mono',monospace;font-size:12px;
-    background:rgba(212,168,67,0.25);color:var(--brand-gold-light);
-    padding:4px 12px;border-radius:20px;
-  }
-
-  .quiz-body{padding:32px;}
-
-  .quiz-question{font-size:1.05rem;font-weight:600;margin-bottom:24px;color:var(--text-primary);line-height:1.6;}
-
-  .quiz-options{display:flex;flex-direction:column;gap:10px;}
-
-  .quiz-option{
-    display:flex;align-items:flex-start;gap:14px;padding:14px 18px;
-    border:2px solid var(--border);border-radius:10px;cursor:pointer;
-    transition:all 0.2s ease;user-select:none;
-  }
-
-  .quiz-option:hover{border-color:var(--brand-green-light);background:rgba(20,107,74,0.04);}
-  .quiz-option.selected{border-color:var(--brand-green);background:rgba(20,107,74,0.06);}
-  .quiz-option.correct{border-color:var(--green);background:var(--green-light);}
-  .quiz-option.incorrect{border-color:var(--red);background:var(--red-light);}
-  .quiz-option.disabled{pointer-events:none;}
-
-  .option-marker{
-    width:28px;height:28px;border-radius:50%;border:2px solid var(--border);
-    display:flex;align-items:center;justify-content:center;
-    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;
-    flex-shrink:0;margin-top:1px;transition:all 0.2s ease;
-  }
-
-  .quiz-option.selected .option-marker{border-color:var(--brand-green);background:var(--brand-green);color:#fff;}
-  .quiz-option.correct .option-marker{border-color:var(--brand-green-mid);background:var(--brand-green-mid);color:#fff;}
-  .quiz-option.incorrect .option-marker{border-color:var(--red);background:var(--red);color:#fff;}
-
-  .option-text{flex:1;line-height:1.6;padding-top:3px;}
-
-  .quiz-feedback{
-    display:none;margin-top:20px;padding:18px 22px;border-radius:10px;
-    font-size:0.95rem;line-height:1.6;animation:fadeUp 0.35s ease;
-  }
-
-  @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-
-  .quiz-feedback.show{display:block;}
-  .quiz-feedback.correct{background:var(--green-light);border:1px solid var(--brand-green-mid);color:#0a4a30;}
-  .quiz-feedback.incorrect{background:var(--red-light);border:1px solid var(--red);color:#7f1d1d;}
-
-  .quiz-feedback strong{
-    display:block;margin-bottom:4px;
-    font-family:'JetBrains Mono',monospace;font-size:12px;
-    letter-spacing:0.06em;text-transform:uppercase;
-  }
-
-  .quiz-actions{margin-top:24px;display:flex;gap:12px;}
-
-  .btn{
-    font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.04em;
-    padding:12px 28px;border:none;border-radius:8px;cursor:pointer;
-    transition:all 0.2s ease;font-weight:600;
-  }
-
-  .btn-primary{background:var(--brand-green-dark);color:var(--brand-gold-light);}
-  .btn-primary:hover{background:var(--brand-green);letter-spacing:0.06em;}
-  .btn-primary:disabled{opacity:0.4;cursor:not-allowed;}
-
-  .btn-secondary{background:transparent;color:var(--brand-green-dark);border:2px solid var(--border);}
-  .btn-secondary:hover{border-color:var(--brand-green);}
-
-  .section-nav{
-    display:flex;justify-content:space-between;align-items:center;
-    margin-top:48px;padding-top:32px;border-top:1px solid var(--border);
-  }
-
-  .section-nav .btn{font-size:12px;}
-
-  .score-panel{
-    background:linear-gradient(135deg,var(--brand-green-deep),var(--brand-green-dark));
-    color:#fff;border-radius:var(--radius);padding:48px;text-align:center;margin:40px 0;
-  }
-
-  .score-panel h2{font-family:'DM Serif Display',serif;font-size:2rem;margin-bottom:8px;}
-
-  .score-panel .score-number{
-    font-family:'DM Serif Display',serif;font-size:4rem;color:var(--brand-gold);margin:16px 0;
-  }
-
-  .score-panel .score-detail{opacity:0.7;font-size:1rem;}
-
-  .score-panel .score-message{
-    margin-top:24px;font-size:1.1rem;line-height:1.7;max-width:480px;
-    margin-left:auto;margin-right:auto;opacity:0.85;
-  }
-
-  .diagram-container{
-    display:flex;align-items:center;justify-content:center;gap:24px;margin:24px 0;flex-wrap:wrap;
-  }
-
-  .diagram-box{
-    padding:20px 24px;border-radius:10px;text-align:center;
-    font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;min-width:140px;
-  }
-
-  .diagram-arrow{font-size:1.5rem;color:var(--text-muted);}
-
-  .diagram-box.kernel{background:#f5e6c8;border:2px solid var(--brand-gold-light);color:var(--brand-gold-dark);}
-  .diagram-box.surface{background:#d5ebe2;border:2px solid var(--brand-green-light);color:var(--brand-green-dark);}
-  .diagram-box.air{background:var(--brand-green-pale);border:2px solid var(--brand-green-mid);color:var(--brand-green-dark);}
-
-  .scenario-card{
-    background:linear-gradient(135deg,var(--brand-cream),var(--brand-cream-deep));
-    border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin:24px 0;
-  }
-
-  .scenario-card .scenario-label{
-    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--brand-green-dark);
-    letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;
-  }
-
-  .scenario-card h4{font-family:'DM Serif Display',serif;font-size:1.2rem;margin-bottom:12px;}
-
-  .fill-blank-input{
-    font-family:'JetBrains Mono',monospace;font-size:14px;border:none;
-    border-bottom:2px solid var(--brand-green);background:transparent;
-    padding:4px 8px;outline:none;width:80px;text-align:center;
-  }
-
-  .fill-blank-input:focus{border-bottom-color:var(--brand-green-deep);}
-
-  .drop-label{
-    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);
-    text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;
-  }
-
-  .drag-item{
-    font-family:'JetBrains Mono',monospace;font-size:13px;padding:12px 18px;
-    background:var(--brand-cream-deep);border:2px dashed var(--border);
-    border-radius:8px;cursor:grab;transition:all 0.2s ease;user-select:none;
-  }
-
-  .drag-item:active{cursor:grabbing;}
-  .drag-item:hover{border-color:var(--brand-green);}
-  .drag-item.placed{border-style:solid;border-color:var(--brand-green-mid);background:var(--brand-green-pale);}
-
-  .drop-slot{
-    min-height:48px;border:2px dashed var(--border);border-radius:8px;
-    display:flex;align-items:center;padding:0 18px;
-    font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-muted);
-  }
-
-  .drop-slot.filled{
-    border-style:solid;border-color:var(--brand-green-mid);
-    background:var(--brand-green-pale);color:var(--text-primary);
-  }
-
-  .sound-indicator{
-    position:fixed;bottom:24px;right:24px;
-    width:48px;height:48px;border-radius:50%;
-    background:var(--brand-green-dark);color:#fff;
-    display:flex;align-items:center;justify-content:center;
-    font-size:20px;z-index:1000;
-    box-shadow:0 4px 16px rgba(10,61,46,0.3);
-    cursor:pointer;transition:all 0.3s ease;
-    border:2px solid var(--brand-gold);
-  }
-
-  .sound-indicator:hover{transform:scale(1.1);}
-  .sound-indicator.muted{background:var(--red);border-color:var(--red);}
-
-  .sound-indicator .sound-bars{
-    display:flex;align-items:flex-end;gap:2px;height:16px;
-  }
-
-  .sound-indicator .sound-bar{
-    width:3px;background:#fff;border-radius:1px;
-    animation:soundBar 0.8s ease-in-out infinite alternate;
-  }
-
-  .sound-indicator .sound-bar:nth-child(1){height:6px;animation-delay:0s;}
-  .sound-indicator .sound-bar:nth-child(2){height:12px;animation-delay:0.2s;}
-  .sound-indicator .sound-bar:nth-child(3){height:8px;animation-delay:0.4s;}
-
-  .sound-indicator.muted .sound-bar{animation:none;height:3px;}
-
-  @keyframes soundBar{
-    0%{height:4px;}
-    100%{height:16px;}
-  }
-
-  /* ── List Item Speaker Icon ── */
-  .content-card ul li .li-read-icon{
-    display:none;
-    position:absolute;right:0;top:50%;transform:translateY(-50%);
-    font-size:11px;opacity:0.4;cursor:pointer;
-  }
-
-  .content-card:hover ul li:hover .li-read-icon{display:inline;}
-
-  @media(max-width:768px){
-    .hero{padding:60px 24px 50px;}
-    .hero-stats{gap:24px;}
-    .content-card{padding:24px;}
-    .quiz-body{padding:20px;}
-    .score-panel{padding:32px 24px;}
-    .nav-tab{padding:14px 14px;font-size:11px;}
-    .top-bar{padding:0 16px;}
-    .progress-bar-bg{width:120px;}
-    .audio-bar{gap:8px;padding:8px 12px;flex-wrap:wrap;height:auto;}
-    .hero{margin-top:120px;}
-    .nav-sticky{top:120px;}
-  }
+:root{
+  --brand-green-deep:#0a3d2e;--brand-green-dark:#0f5138;--brand-green:#146b4a;
+  --brand-green-mid:#1a8a5e;--brand-green-light:#34a873;--brand-green-pale:#e6f5ee;
+  --brand-gold:#d4a843;--brand-gold-light:#f0d080;--brand-gold-dark:#b08830;
+  --brand-cream:#f9f6ef;--brand-cream-deep:#eee9dc;
+  --bg:var(--brand-cream);--surface:#fffdf8;
+  --accent:var(--brand-gold);--accent-dark:var(--brand-gold-dark);--accent-light:var(--brand-gold-light);
+  --green:var(--brand-green-mid);--green-light:var(--brand-green-pale);
+  --red:#c0392b;--red-light:#fdecea;
+  --text-primary:#1a1612;--text-secondary:#4a4035;--text-muted:#8a7e6e;
+  --border:#d6cfc0;--shadow:rgba(10,61,46,0.08);--radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Source Serif 4',Georgia,serif;background:var(--bg);color:var(--text-primary);line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;}
+
+/* ── Name Entry Screen ── */
+.name-screen{
+  position:fixed;inset:0;z-index:10000;
+  background:linear-gradient(135deg,var(--brand-green-deep) 0%,var(--brand-green-dark) 50%,var(--brand-green) 100%);
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity 0.6s ease,transform 0.6s ease;
+}
+.name-screen.hidden{opacity:0;pointer-events:none;transform:scale(1.05);}
+.name-card{
+  background:var(--surface);border-radius:20px;padding:56px 48px;
+  max-width:520px;width:90%;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+.name-card .logo-big{
+  width:72px;height:72px;background:var(--brand-green);border-radius:50%;
+  margin:0 auto 24px;display:flex;align-items:center;justify-content:center;
+  font-family:'DM Serif Display',serif;font-size:32px;color:var(--brand-gold);
+  border:3px solid var(--brand-gold);
+}
+.name-card h1{font-family:'DM Serif Display',serif;font-size:1.8rem;margin-bottom:6px;color:var(--brand-green-deep);}
+.name-card .subtitle{color:var(--text-muted);margin-bottom:32px;font-size:0.95rem;}
+.name-card label{
+  display:block;text-align:left;font-family:'JetBrains Mono',monospace;
+  font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--brand-green-dark);margin-bottom:8px;
+}
+.name-card input{
+  width:100%;padding:14px 18px;border:2px solid var(--border);border-radius:10px;
+  font-family:'Source Serif 4',Georgia,serif;font-size:1.1rem;
+  outline:none;transition:border-color 0.3s ease;
+  background:var(--brand-cream);
+}
+.name-card input:focus{border-color:var(--brand-green);}
+.name-card input::placeholder{color:var(--text-muted);opacity:0.6;}
+.name-card .start-btn{
+  width:100%;margin-top:24px;padding:16px;
+  background:var(--brand-green-dark);color:var(--brand-gold-light);
+  border:none;border-radius:10px;font-family:'JetBrains Mono',monospace;
+  font-size:14px;letter-spacing:0.06em;font-weight:600;cursor:pointer;
+  transition:all 0.3s ease;
+}
+.name-card .start-btn:hover{background:var(--brand-green);letter-spacing:0.1em;}
+.name-card .start-btn:disabled{opacity:0.4;cursor:not-allowed;}
+.name-card .error-msg{
+  color:var(--red);font-size:13px;margin-top:8px;font-family:'JetBrains Mono',monospace;
+  display:none;
+}
+
+/* ── Top Bar ── */
+.top-bar{
+  position:fixed;top:0;left:0;right:0;height:56px;
+  background:var(--brand-green-deep);color:#fff;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;z-index:1000;
+  font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.03em;
+}
+.top-bar .logo-area{display:flex;align-items:center;gap:14px;}
+.top-bar .logo-mark{
+  width:32px;height:32px;background:var(--brand-gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DM Serif Display',serif;font-size:16px;color:var(--brand-green-deep);
+}
+.top-bar .logo-text{font-weight:600;letter-spacing:0.06em;}
+.top-bar .user-greeting{
+  font-size:12px;color:var(--brand-gold-light);opacity:0.8;
+}
+.progress-container{display:flex;align-items:center;gap:12px;}
+.progress-bar-bg{width:200px;height:6px;background:rgba(255,255,255,0.2);border-radius:3px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--brand-gold);border-radius:3px;width:0%;transition:width 0.6s cubic-bezier(0.25,1,0.5,1);}
+.progress-label{opacity:0.85;font-size:12px;}
+.score-badge{background:rgba(212,168,67,0.25);padding:4px 14px;border-radius:20px;font-weight:600;color:var(--brand-gold-light);}
+
+/* ── Audio Bar ── */
+.audio-bar{
+  position:fixed;top:56px;left:0;right:0;height:44px;
+  background:var(--brand-green-dark);
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  z-index:1000;border-bottom:1px solid rgba(255,255,255,0.1);padding:0 24px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(255,255,255,0.85);
+}
+.audio-btn{
+  background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);
+  color:#fff;padding:6px 16px;border-radius:6px;cursor:pointer;
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;
+  font-weight:600;transition:all 0.2s ease;display:flex;align-items:center;gap:6px;
+}
+.audio-btn:hover{background:rgba(255,255,255,0.22);letter-spacing:0.06em;}
+.audio-btn.active{background:var(--brand-gold);color:var(--brand-green-deep);border-color:var(--brand-gold);}
+.audio-status{font-size:11px;color:var(--brand-gold-light);opacity:0.8;min-width:180px;text-align:center;}
+.volume-slider{-webkit-appearance:none;width:80px;height:4px;border-radius:2px;background:rgba(255,255,255,0.2);outline:none;cursor:pointer;}
+.volume-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--brand-gold);cursor:pointer;}
+.voice-select,.speed-select{
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+  color:#fff;padding:4px 8px;border-radius:4px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;
+}
+.voice-select{max-width:180px;}
+.voice-select option,.speed-select option{background:var(--brand-green-deep);color:#fff;}
+.speed-select{width:60px;}
+
+/* ── Hero ── */
+.hero{
+  margin-top:100px;
+  background:linear-gradient(135deg,var(--brand-green-deep),var(--brand-green-dark),var(--brand-green));
+  color:#fff;padding:100px 40px 80px;position:relative;overflow:hidden;
+}
+.hero::before{content:'';position:absolute;top:-40%;right:-10%;width:500px;height:500px;background:radial-gradient(circle,rgba(212,168,67,0.12),transparent 65%);pointer-events:none;}
+.hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:1;}
+.hero-badge{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;
+  text-transform:uppercase;background:rgba(212,168,67,0.15);
+  display:inline-block;padding:6px 16px;border-radius:4px;
+  margin-bottom:24px;border:1px solid rgba(212,168,67,0.25);color:var(--brand-gold-light);
+}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2.4rem,5vw,3.6rem);font-weight:400;line-height:1.15;margin-bottom:8px;}
+.hero h1 .brand-name{color:var(--brand-gold);}
+.hero .hero-tagline{font-family:'DM Serif Display',serif;font-size:clamp(1.1rem,2.2vw,1.4rem);color:var(--brand-gold-light);opacity:0.9;margin-bottom:20px;font-style:italic;}
+.hero p{font-size:1.1rem;opacity:0.75;max-width:580px;line-height:1.8;}
+.hero-stats{display:flex;gap:40px;margin-top:48px;flex-wrap:wrap;}
+.hero-stat .num{font-family:'DM Serif Display',serif;font-size:2.2rem;display:block;color:var(--brand-gold);}
+.hero-stat .label{font-size:0.85rem;opacity:0.6;text-transform:uppercase;letter-spacing:0.08em;font-family:'JetBrains Mono',monospace;}
+
+/* ── Nav ── */
+.nav-sticky{position:sticky;top:100px;z-index:999;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;}
+.nav-tabs{display:flex;max-width:1100px;margin:0 auto;padding:0 24px;}
+.nav-tab{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.04em;
+  padding:16px 20px;cursor:pointer;white-space:nowrap;
+  border-bottom:3px solid transparent;color:var(--text-muted);
+  transition:all 0.25s ease;user-select:none;
+}
+.nav-tab:hover{color:var(--text-primary);}
+.nav-tab.active{color:var(--brand-green-dark);border-bottom-color:var(--brand-green);font-weight:600;}
+.nav-tab .tab-icon{margin-right:6px;font-size:14px;}
+
+.main-container{max-width:1100px;margin:0 auto;padding:0 24px 100px;}
+.section{display:none;animation:fadeInSection 0.5s ease forwards;}
+.section.active{display:block;}
+@keyframes fadeInSection{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.section-header{padding:56px 0 32px;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--brand-green-dark);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;}
+.section-title{font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,3.5vw,2.4rem);font-weight:400;color:var(--text-primary);margin-bottom:12px;}
+.section-subtitle{font-size:1.05rem;color:var(--text-muted);max-width:640px;}
+
+/* ── Cards ── */
+.content-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:36px 40px;margin-bottom:24px;
+  box-shadow:0 2px 12px var(--shadow);transition:box-shadow 0.3s ease;
+}
+.content-card:hover{box-shadow:0 4px 24px rgba(10,61,46,0.12);}
+.content-card h3{font-family:'DM Serif Display',serif;font-size:1.35rem;margin-bottom:16px;color:var(--text-primary);}
+.content-card p{color:var(--text-secondary);margin-bottom:12px;}
+.content-card ul{list-style:none;padding:0;}
+.content-card ul li{padding:8px 0 8px 28px;position:relative;color:var(--text-secondary);}
+.content-card ul li::before{content:'✓';position:absolute;left:0;color:var(--brand-green-mid);font-weight:700;font-size:0.9em;}
+
+.read-card-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;
+  padding:6px 14px;border:1px solid var(--brand-green);border-radius:6px;
+  background:transparent;color:var(--brand-green-dark);
+  cursor:pointer;transition:all 0.2s ease;margin-bottom:16px;
+}
+.read-card-btn:hover{background:var(--brand-green-pale);letter-spacing:0.06em;}
+.read-card-btn.reading{background:var(--brand-green);color:#fff;animation:pulse-reading 1.5s ease-in-out infinite;}
+@keyframes pulse-reading{0%,100%{opacity:1;}50%{opacity:0.7;}}
+.content-card.speaking{border-color:var(--brand-green);box-shadow:0 0 0 3px rgba(26,138,94,0.15),0 4px 24px rgba(10,61,46,0.12);}
+.content-card.speaking h3{color:var(--brand-green-dark);}
+.content-card ul li.reading-now{background:rgba(26,138,94,0.08);border-radius:4px;padding-left:32px;transition:all 0.3s ease;}
+.content-card p.reading-now,.content-card h3.reading-now{background:rgba(26,138,94,0.08);border-radius:4px;padding:4px 8px;margin-left:-8px;margin-right:-8px;transition:all 0.3s ease;}
+
+.callout{border-left:4px solid var(--brand-green);background:linear-gradient(90deg,rgba(20,107,74,0.06),transparent);padding:20px 24px;border-radius:0 var(--radius) var(--radius) 0;margin:20px 0;}
+.callout.info{border-left-color:var(--brand-green-light);}
+.callout.warning{border-left-color:var(--red);background:linear-gradient(90deg,rgba(192,57,43,0.06),transparent);}
+.callout .callout-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brand-green-dark);margin-bottom:6px;font-weight:600;}
+.callout.info .callout-label{color:var(--brand-green-light);}
+.callout.warning .callout-label{color:var(--red);}
+
+.formula-box{
+  background:var(--brand-cream-deep);border:1px solid var(--border);border-radius:var(--radius);
+  padding:24px 28px;margin:20px 0;
+  font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text-primary);line-height:2;overflow-x:auto;
+}
+.data-table-wrap{overflow-x:auto;margin:20px 0;border-radius:var(--radius);border:1px solid var(--border);}
+.data-table{width:100%;border-collapse:collapse;font-size:14px;}
+.data-table thead{background:var(--brand-green-dark);color:#fff;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;}
+.data-table th{padding:14px 16px;text-align:left;font-weight:600;}
+.data-table td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--text-secondary);}
+.data-table tbody tr:nth-child(even){background:var(--brand-cream-deep);}
+.data-table tbody tr:hover{background:rgba(20,107,74,0.06);}
+
+/* ── Quiz ── */
+.quiz-container{background:var(--surface);border:2px solid var(--brand-green);border-radius:var(--radius);margin:40px 0;overflow:hidden;box-shadow:0 4px 24px rgba(10,61,46,0.1);}
+.quiz-header{background:linear-gradient(135deg,var(--brand-green-deep),var(--brand-green-dark));color:#fff;padding:20px 32px;display:flex;align-items:center;justify-content:space-between;}
+.quiz-header h3{font-family:'DM Serif Display',serif;font-size:1.2rem;font-weight:400;}
+.quiz-counter{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(212,168,67,0.25);color:var(--brand-gold-light);padding:4px 12px;border-radius:20px;}
+.quiz-body{padding:32px;}
+.quiz-question{font-size:1.05rem;font-weight:600;margin-bottom:24px;color:var(--text-primary);line-height:1.6;}
+.quiz-options{display:flex;flex-direction:column;gap:10px;}
+.quiz-option{
+  display:flex;align-items:flex-start;gap:14px;padding:14px 18px;
+  border:2px solid var(--border);border-radius:10px;cursor:pointer;
+  transition:all 0.2s ease;user-select:none;
+}
+.quiz-option:hover{border-color:var(--brand-green-light);background:rgba(20,107,74,0.04);}
+.quiz-option.selected{border-color:var(--brand-green);background:rgba(20,107,74,0.06);}
+.quiz-option.correct{border-color:var(--green);background:var(--green-light);}
+.quiz-option.incorrect{border-color:var(--red);background:var(--red-light);}
+.quiz-option.disabled{pointer-events:none;}
+.option-marker{
+  width:28px;height:28px;border-radius:50%;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;
+  flex-shrink:0;margin-top:1px;transition:all 0.2s ease;
+}
+.quiz-option.selected .option-marker{border-color:var(--brand-green);background:var(--brand-green);color:#fff;}
+.quiz-option.correct .option-marker{border-color:var(--brand-green-mid);background:var(--brand-green-mid);color:#fff;}
+.quiz-option.incorrect .option-marker{border-color:var(--red);background:var(--red);color:#fff;}
+.option-text{flex:1;line-height:1.6;padding-top:3px;}
+.quiz-feedback{display:none;margin-top:20px;padding:18px 22px;border-radius:10px;font-size:0.95rem;line-height:1.6;animation:fadeUp 0.35s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct{background:var(--green-light);border:1px solid var(--brand-green-mid);color:#0a4a30;}
+.quiz-feedback.incorrect{background:var(--red-light);border:1px solid var(--red);color:#7f1d1d;}
+.quiz-feedback strong{display:block;margin-bottom:4px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;}
+
+.quiz-actions{margin-top:24px;display:flex;gap:12px;}
+.btn{
+  font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.04em;
+  padding:12px 28px;border:none;border-radius:8px;cursor:pointer;
+  transition:all 0.2s ease;font-weight:600;
+}
+.btn-primary{background:var(--brand-green-dark);color:var(--brand-gold-light);}
+.btn-primary:hover{background:var(--brand-green);letter-spacing:0.06em;}
+.btn-primary:disabled{opacity:0.4;cursor:not-allowed;}
+.btn-secondary{background:transparent;color:var(--brand-green-dark);border:2px solid var(--border);}
+.btn-secondary:hover{border-color:var(--brand-green);}
+.section-nav{display:flex;justify-content:space-between;align-items:center;margin-top:48px;padding-top:32px;border-top:1px solid var(--border);}
+.section-nav .btn{font-size:12px;}
+
+.score-panel{
+  background:linear-gradient(135deg,var(--brand-green-deep),var(--brand-green-dark));
+  color:#fff;border-radius:var(--radius);padding:48px;text-align:center;margin:40px 0;
+}
+.score-panel h2{font-family:'DM Serif Display',serif;font-size:2rem;margin-bottom:8px;}
+.score-panel .score-number{font-family:'DM Serif Display',serif;font-size:4rem;color:var(--brand-gold);margin:16px 0;}
+.score-panel .score-detail{opacity:0.7;font-size:1rem;}
+.score-panel .score-message{margin-top:24px;font-size:1.1rem;line-height:1.7;max-width:480px;margin-left:auto;margin-right:auto;opacity:0.85;}
+
+/* ── Diagram ── */
+.diagram-container{display:flex;align-items:center;justify-content:center;gap:24px;margin:24px 0;flex-wrap:wrap;}
+.diagram-box{padding:20px 24px;border-radius:10px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;min-width:140px;}
+.diagram-arrow{font-size:1.5rem;color:var(--text-muted);}
+.diagram-box.kernel{background:#f5e6c8;border:2px solid var(--brand-gold-light);color:var(--brand-gold-dark);}
+.diagram-box.surface{background:#d5ebe2;border:2px solid var(--brand-green-light);color:var(--brand-green-dark);}
+.diagram-box.air{background:var(--brand-green-pale);border:2px solid var(--brand-green-mid);color:var(--brand-green-dark);}
+
+.scenario-card{background:linear-gradient(135deg,var(--brand-cream),var(--brand-cream-deep));border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin:24px 0;}
+.scenario-card .scenario-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--brand-green-dark);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;}
+.scenario-card h4{font-family:'DM Serif Display',serif;font-size:1.2rem;margin-bottom:12px;}
+
+.fill-blank-input{font-family:'JetBrains Mono',monospace;font-size:14px;border:none;border-bottom:2px solid var(--brand-green);background:transparent;padding:4px 8px;outline:none;width:80px;text-align:center;}
+.fill-blank-input:focus{border-bottom-color:var(--brand-green-deep);}
+.drop-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;}
+.drag-item{font-family:'JetBrains Mono',monospace;font-size:13px;padding:12px 18px;background:var(--brand-cream-deep);border:2px dashed var(--border);border-radius:8px;cursor:grab;transition:all 0.2s ease;user-select:none;}
+.drag-item:active{cursor:grabbing;}
+.drag-item:hover{border-color:var(--brand-green);}
+.drag-item.placed{border-style:solid;border-color:var(--brand-green-mid);background:var(--brand-green-pale);}
+.drop-slot{min-height:48px;border:2px dashed var(--border);border-radius:8px;display:flex;align-items:center;padding:0 18px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-muted);}
+.drop-slot.filled{border-style:solid;border-color:var(--brand-green-mid);background:var(--brand-green-pale);color:var(--text-primary);}
+
+.sound-indicator{
+  position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:50%;
+  background:var(--brand-green-dark);color:#fff;display:flex;align-items:center;justify-content:center;
+  z-index:1000;box-shadow:0 4px 16px rgba(10,61,46,0.3);cursor:pointer;transition:all 0.3s ease;border:2px solid var(--brand-gold);
+}
+.sound-indicator:hover{transform:scale(1.1);}
+.sound-indicator.muted{background:var(--red);border-color:var(--red);}
+.sound-indicator .sound-bars{display:flex;align-items:flex-end;gap:2px;height:16px;}
+.sound-indicator .sound-bar{width:3px;background:#fff;border-radius:1px;animation:soundBar 0.8s ease-in-out infinite alternate;}
+.sound-indicator .sound-bar:nth-child(1){height:6px;animation-delay:0s;}
+.sound-indicator .sound-bar:nth-child(2){height:12px;animation-delay:0.2s;}
+.sound-indicator .sound-bar:nth-child(3){height:8px;animation-delay:0.4s;}
+.sound-indicator.muted .sound-bar{animation:none;height:3px;}
+@keyframes soundBar{0%{height:4px;}100%{height:16px;}}
+
+/* ── Certificate Overlay ── */
+.cert-overlay{
+  position:fixed;inset:0;z-index:10001;background:rgba(10,61,46,0.85);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity 0.5s ease;
+  backdrop-filter:blur(4px);
+}
+.cert-overlay.show{opacity:1;pointer-events:all;}
+
+.cert-wrapper{position:relative;max-width:900px;width:92%;}
+
+.cert-actions{
+  display:flex;gap:12px;justify-content:center;margin-top:24px;
+}
+
+.cert-btn{
+  font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.04em;
+  padding:14px 32px;border:none;border-radius:8px;cursor:pointer;
+  transition:all 0.2s ease;font-weight:600;
+}
+.cert-btn.download{background:var(--brand-gold);color:var(--brand-green-deep);}
+.cert-btn.download:hover{background:var(--brand-gold-light);letter-spacing:0.08em;}
+.cert-btn.close{background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);}
+.cert-btn.close:hover{background:rgba(255,255,255,0.25);}
+
+/* ── Certificate Canvas Styles ── */
+#certCanvas{display:none;}
+
+@media(max-width:768px){
+  .hero{padding:60px 24px 50px;}
+  .hero-stats{gap:24px;}
+  .content-card{padding:24px;}
+  .quiz-body{padding:20px;}
+  .score-panel{padding:32px 24px;}
+  .nav-tab{padding:14px 14px;font-size:11px;}
+  .top-bar{padding:0 16px;}
+  .progress-bar-bg{width:120px;}
+  .audio-bar{gap:8px;padding:8px 12px;flex-wrap:wrap;height:auto;}
+  .hero{margin-top:120px;}
+  .nav-sticky{top:120px;}
+  .name-card{padding:36px 24px;}
+}
 </style>
 </head>
 <body>
 
-<div class="top-bar">
+<!-- ═══ NAME ENTRY SCREEN ═══ -->
+<div class="name-screen" id="nameScreen">
+  <div class="name-card">
+    <div class="logo-big">S</div>
+    <h1>Stellar Seeds</h1>
+    <p class="subtitle">Seed Corn Drying — Interactive Training Module</p>
+    <label for="userName">Enter your full name to begin</label>
+    <input type="text" id="userName" placeholder="e.g. John Smith" autocomplete="name" autofocus>
+    <div class="error-msg" id="nameError">Please enter your name to continue.</div>
+    <button class="start-btn" id="startBtn" onclick="startTraining()">Begin Training</button>
+  </div>
+</div>
+
+<!-- ── Top Bar ── -->
+<div class="top-bar" style="display:none;" id="topBar">
   <div class="logo-area">
     <div class="logo-mark">S</div>
     <span class="logo-text">STELLAR SEEDS — DRYING TRAINING</span>
   </div>
+  <span class="user-greeting" id="userGreeting"></span>
   <div class="progress-container">
     <span class="score-badge" id="scoreDisplay">Score: 0 / 0</span>
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
@@ -605,19 +383,12 @@
   </div>
 </div>
 
-<div class="audio-bar">
-  <button class="audio-btn" id="readSlideBtn" onclick="readCurrentSlide()">
-    <span>🔊</span> Read This Slide
-  </button>
-  <button class="audio-btn" id="stopBtn" onclick="stopSpeaking()">
-    <span>⏹</span> Stop
-  </button>
-  <button class="audio-btn" id="pauseBtn" onclick="togglePause()">
-    <span>⏸</span> Pause
-  </button>
-  <button class="audio-btn active" id="muteBtn" onclick="toggleMute()">
-    <span>🔔</span> Sound FX
-  </button>
+<!-- ── Audio Bar ── -->
+<div class="audio-bar" style="display:none;" id="audioBar">
+  <button class="audio-btn" id="readSlideBtn" onclick="readCurrentSlide()"><span>🔊</span> Read Slide</button>
+  <button class="audio-btn" onclick="stopSpeaking()"><span>⏹</span> Stop</button>
+  <button class="audio-btn" id="pauseBtn" onclick="togglePause()"><span>⏸</span> Pause</button>
+  <button class="audio-btn active" id="muteBtn" onclick="toggleMute()"><span>🔔</span> Sound FX</button>
   <span class="audio-status" id="audioStatus">Ready</span>
   <label style="display:flex;align-items:center;gap:6px;">
     <span style="font-size:11px;">Voice:</span>
@@ -640,13 +411,13 @@
 </div>
 
 <div class="sound-indicator" id="soundIndicator" onclick="toggleMute()" title="Toggle sound effects">
-  <div class="sound-bars">
-    <div class="sound-bar"></div>
-    <div class="sound-bar"></div>
-    <div class="sound-bar"></div>
-  </div>
+  <div class="sound-bars"><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div></div>
 </div>
 
+<!-- ── Main Content (hidden until name entered) ── -->
+<div id="mainContent" style="display:none;">
+
+<!-- Hero -->
 <div class="hero">
   <div class="hero-inner">
     <div class="hero-badge">Stellar Seeds — Interactive Training Module</div>
@@ -661,8 +432,9 @@
   </div>
 </div>
 
+<!-- Nav -->
 <div class="nav-sticky">
-  <div class="nav-tabs" id="navTabs">
+  <div class="nav-tabs">
     <div class="nav-tab active" data-section="0"><span class="tab-icon">01</span> Introduction</div>
     <div class="nav-tab" data-section="1"><span class="tab-icon">02</span> How Corn Dries</div>
     <div class="nav-tab" data-section="2"><span class="tab-icon">03</span> Drying Rate</div>
@@ -683,24 +455,17 @@
       <h2 class="section-title">Introduction & Importance of Proper Drying</h2>
       <p class="section-subtitle">Why mechanical drying is essential for preserving seed quality from harvest through storage.</p>
     </div>
-
     <div class="content-card">
       <button class="read-card-btn" onclick="readCard(this)"><span>🔊</span> Read Aloud</button>
       <h3>What We Want: High Quality Seed</h3>
       <p>The ultimate goal of seed corn drying is to produce and preserve high quality seed with:</p>
-      <ul>
-        <li>Good warm germination</li>
-        <li>Good seed vigor</li>
-        <li>Resulting in good field emergence</li>
-      </ul>
+      <ul><li>Good warm germination</li><li>Good seed vigor</li><li>Resulting in good field emergence</li></ul>
     </div>
-
     <div class="content-card">
       <button class="read-card-btn" onclick="readCard(this)"><span>🔊</span> Read Aloud</button>
       <h3>Maximum Quality Potential</h3>
       <p><strong>Maximum quality potential is reached at physiological maturity.</strong> From that point forward, quality must be preserved through careful handling at every stage.</p>
     </div>
-
     <div class="content-card">
       <button class="read-card-btn" onclick="readCard(this)"><span>🔊</span> Read Aloud</button>
       <h3>How Quality Is Preserved</h3>
@@ -712,11 +477,7 @@
         <li>Good storage practices</li>
       </ul>
     </div>
-
-    <div class="callout">
-      <div class="callout-label">Key Takeaway</div>
-      <p>Mechanical drying is necessary to preserve seed quality. Without it, seed deteriorates rapidly after physiological maturity.</p>
-    </div>
+    <div class="callout"><div class="callout-label">Key Takeaway</div><p>Mechanical drying is necessary to preserve seed quality.</p></div>
 
     <div class="quiz-container" data-quiz="q1">
       <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 1 of 25</span></div>
@@ -729,10 +490,9 @@
           <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">During seed conditioning</span></div>
         </div>
         <div class="quiz-feedback correct"><strong>Correct</strong>Maximum quality potential is reached at physiological maturity.</div>
-        <div class="quiz-feedback incorrect"><strong>Not quite</strong>The correct answer is at physiological maturity.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>At physiological maturity.</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q2">
       <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 2 of 25</span></div>
       <div class="quiz-body">
@@ -743,44 +503,31 @@
           <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">Good genetic modification practices</span></div>
           <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">Good storage practices</span></div>
         </div>
-        <div class="quiz-feedback correct"><strong>Correct</strong>The four practices are: harvesting, drying, conditioning, and storage.</div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>Harvesting, drying, conditioning, and storage are the four practices.</div>
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>"Good genetic modification practices" is not listed.</div>
       </div>
     </div>
-
-    <div class="section-nav"><div></div><button class="btn btn-primary" onclick="goToSection(1)">Next: How Corn Dries →</button></div>
+    <div class="section-nav"><div></div><button class="btn btn-primary" onclick="goToSection(1)">Next →</button></div>
   </div>
 
   <!-- ═══ SECTION 1 ═══ -->
   <div class="section" id="section-1">
-    <div class="section-header">
-      <div class="section-number">Section 02</div>
-      <h2 class="section-title">How Does Ear Corn & Kernels Dry?</h2>
-      <p class="section-subtitle">Understanding moisture movement from the kernel center to the atmosphere.</p>
-    </div>
-
+    <div class="section-header"><div class="section-number">Section 02</div><h2 class="section-title">How Does Ear Corn & Kernels Dry?</h2><p class="section-subtitle">Understanding moisture movement from the kernel center to the atmosphere.</p></div>
     <div class="content-card">
       <button class="read-card-btn" onclick="readCard(this)"><span>🔊</span> Read Aloud</button>
       <h3>Moisture Movement in Ear Corn</h3>
-      <ul>
-        <li>Moisture on the outside surface moves into the surrounding atmosphere</li>
-        <li>Internal moisture moves past or through the kernels to the outside surface</li>
-      </ul>
+      <ul><li>Moisture on the outside surface moves into the surrounding atmosphere</li><li>Internal moisture moves past or through the kernels to the outside surface</li></ul>
     </div>
-
     <div class="content-card">
       <button class="read-card-btn" onclick="readCard(this)"><span>🔊</span> Read Aloud</button>
       <h3>How a Kernel Dries</h3>
       <div class="diagram-container">
-        <div class="diagram-box kernel">Water in<br>Center</div>
-        <span class="diagram-arrow">→</span>
-        <div class="diagram-box surface">Water at<br>Surface</div>
-        <span class="diagram-arrow">→</span>
+        <div class="diagram-box kernel">Water in<br>Center</div><span class="diagram-arrow">→</span>
+        <div class="diagram-box surface">Water at<br>Surface</div><span class="diagram-arrow">→</span>
         <div class="diagram-box air">Evaporation<br>into Air</div>
       </div>
-      <p style="margin-top:16px;">Water evaporates from the surface of the kernel. As this happens, water moves from the center of the kernel to the surface.</p>
+      <p style="margin-top:16px;">Water evaporates from the surface. As this happens, water moves from the center to the surface.</p>
     </div>
-
     <div class="content-card">
       <button class="read-card-btn" onclick="readCard(this)"><span>🔊</span> Read Aloud</button>
       <h3>Seeds Are Hygroscopic</h3>
@@ -791,7 +538,6 @@
         <li>These principles are used to dry seed in the dryers</li>
       </ul>
     </div>
-
     <div class="quiz-container" data-quiz="q3">
       <div class="quiz-header"><h3>True or False</h3><span class="quiz-counter">Q 3 of 25</span></div>
       <div class="quiz-body">
@@ -801,10 +547,9 @@
           <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">F</span><span class="option-text">False</span></div>
         </div>
         <div class="quiz-feedback correct"><strong>Correct</strong>Seeds are hygroscopic.</div>
-        <div class="quiz-feedback incorrect"><strong>Not quite</strong>This is TRUE.</div>
+        <div class="quiz-feedback incorrect"><strong>Not quite</strong>TRUE.</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q4">
       <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 4 of 25</span></div>
       <div class="quiz-body">
@@ -819,24 +564,18 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>Center → Surface → Air.</div>
       </div>
     </div>
-
     <div class="section-nav"><button class="btn btn-secondary" onclick="goToSection(0)">← Previous</button><button class="btn btn-primary" onclick="goToSection(2)">Next →</button></div>
   </div>
 
   <!-- ═══ SECTION 2 ═══ -->
   <div class="section" id="section-2">
-    <div class="section-header">
-      <div class="section-number">Section 03</div>
-      <h2 class="section-title">Drying Rate & Determining Factors</h2>
-    </div>
-
+    <div class="section-header"><div class="section-number">Section 03</div><h2 class="section-title">Drying Rate & Determining Factors</h2></div>
     <div class="content-card">
       <button class="read-card-btn" onclick="readCard(this)"><span>🔊</span> Read Aloud</button>
       <h3>What Is Drying Rate?</h3>
       <p>Drying rate is expressed as the <strong>length of time utilized in removing a certain amount of water</strong>, measured in <strong>number of hours per point of moisture removed</strong>.</p>
       <div class="formula-box">Example: 69 hours / (35 − 12) = <strong>3.0 hours per point</strong></div>
     </div>
-
     <div class="content-card">
       <button class="read-card-btn" onclick="readCard(this)"><span>🔊</span> Read Aloud</button>
       <h3>Factors Determining Drying Rate</h3>
@@ -848,26 +587,17 @@
         <li>Ability of product to release moisture</li>
       </ul>
     </div>
-
-    <div class="callout warning">
-      <div class="callout-label">Critical Warning</div>
-      <p>High drying rates, especially at high seed moisture content, can damage seed.</p>
-    </div>
-
+    <div class="callout warning"><div class="callout-label">Critical Warning</div><p>High drying rates at high seed moisture can damage seed.</p></div>
     <div class="quiz-container" data-quiz="q5">
       <div class="quiz-header"><h3>Calculation</h3><span class="quiz-counter">Q 5 of 25</span></div>
       <div class="quiz-body">
         <div class="quiz-question">Dried from 38% to 13% in 100 hours. What is the drying rate?</div>
-        <div style="margin:16px 0;">
-          <label class="drop-label">Your Answer:</label>
-          <input type="text" class="fill-blank-input" id="fill1" style="width:120px;" placeholder="___"> hours/point
-        </div>
-        <div class="quiz-actions"><button class="btn btn-primary" onclick="checkFillBlank('fill1', ['4','4.0'], 'q5')">Submit</button></div>
+        <div style="margin:16px 0;"><label class="drop-label">Your Answer:</label> <input type="text" class="fill-blank-input" id="fill1" style="width:120px;" placeholder="___"> hours/point</div>
+        <div class="quiz-actions"><button class="btn btn-primary" onclick="checkFillBlank('fill1',['4','4.0'],'q5')">Submit</button></div>
         <div class="quiz-feedback correct" id="q5-correct"><strong>Correct</strong>100 / 25 = 4.0 hours per point.</div>
         <div class="quiz-feedback incorrect" id="q5-incorrect"><strong>Not quite</strong>100 / (38 − 13) = 4.0 hours per point.</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q6">
       <div class="quiz-header"><h3>Multi-Select</h3><span class="quiz-counter">Q 6 of 25</span></div>
       <div class="quiz-body">
@@ -882,7 +612,6 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>A, C, and D.</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q7">
       <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 7 of 25</span></div>
       <div class="quiz-body">
@@ -897,36 +626,23 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>4.0 hours per point.</div>
       </div>
     </div>
-
     <div class="section-nav"><button class="btn btn-secondary" onclick="goToSection(1)">← Previous</button><button class="btn btn-primary" onclick="goToSection(3)">Next →</button></div>
   </div>
 
   <!-- ═══ SECTION 3 ═══ -->
   <div class="section" id="section-3">
-    <div class="section-header">
-      <div class="section-number">Section 04</div>
-      <h2 class="section-title">Air Temperature & Relative Humidity</h2>
-    </div>
-
+    <div class="section-header"><div class="section-number">Section 04</div><h2 class="section-title">Air Temperature & Relative Humidity</h2></div>
     <div class="content-card">
       <button class="read-card-btn" onclick="readCard(this)"><span>🔊</span> Read Aloud</button>
       <h3>Air Temperature Limits</h3>
-      <ul>
-        <li>Down air — not to exceed 110°F, or 43°C</li>
-        <li>Up air — not to exceed 100°F, or 38°C</li>
-      </ul>
+      <ul><li>Down air — not to exceed 110°F, or 43°C</li><li>Up air — not to exceed 100°F, or 38°C</li></ul>
     </div>
-
     <div class="content-card">
       <button class="read-card-btn" onclick="readCard(this)"><span>🔊</span> Read Aloud</button>
       <h3>What Happens When Temperature Increases</h3>
-      <ul>
-        <li>Water molecules in corn kernels get energized</li>
-        <li>Relative humidity decreases</li>
-      </ul>
+      <ul><li>Water molecules in corn kernels get energized</li><li>Relative humidity decreases</li></ul>
       <p>When both happen, water moves from inside the kernels into the air.</p>
     </div>
-
     <div class="quiz-container" data-quiz="q8">
       <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 8 of 25</span></div>
       <div class="quiz-body">
@@ -941,26 +657,24 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>100°F (38°C).</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q9">
       <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 9 of 25</span></div>
       <div class="quiz-body">
         <div class="quiz-question">When inlet temperature increases, what two things happen?</div>
         <div class="quiz-options">
-          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">Water molecules slow down and RH increases</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">Water molecules slow down, RH increases</span></div>
           <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">Water molecules get energized and RH decreases</span></div>
-          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">Air pressure increases and airflow decreases</span></div>
+          <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">Air pressure increases</span></div>
           <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">Kernel temperature decreases</span></div>
         </div>
         <div class="quiz-feedback correct"><strong>Correct</strong>Water molecules get energized AND RH decreases.</div>
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>Water molecules get energized AND RH decreases.</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q10">
-      <div class="quiz-header"><h3>Tropical Drying</h3><span class="quiz-counter">Q 10 of 25</span></div>
+      <div class="quiz-header"><h3>Tropical</h3><span class="quiz-counter">Q 10 of 25</span></div>
       <div class="quiz-body">
-        <div class="quiz-question">Per degree of wet bulb above 25°C, dry bulb can increase by?</div>
+        <div class="quiz-question">Per degree of wet bulb above 25°C, dry bulb increases by?</div>
         <div class="quiz-options">
           <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">2°C / 4°F</span></div>
           <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">1°C / 2°F</span></div>
@@ -971,32 +685,20 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>1°C/2°F.</div>
       </div>
     </div>
-
     <div class="section-nav"><button class="btn btn-secondary" onclick="goToSection(2)">← Previous</button><button class="btn btn-primary" onclick="goToSection(4)">Next →</button></div>
   </div>
 
   <!-- ═══ SECTION 4 ═══ -->
   <div class="section" id="section-4">
-    <div class="section-header">
-      <div class="section-number">Section 05</div>
-      <h2 class="section-title">Quality Plan Guidelines & Reversal Decisions</h2>
-    </div>
-
+    <div class="section-header"><div class="section-number">Section 05</div><h2 class="section-title">Quality Plan Guidelines & Reversal Decisions</h2></div>
     <div class="content-card">
       <button class="read-card-btn" onclick="readCard(this)"><span>🔊</span> Read Aloud</button>
       <h3>Reverse Air / Shelling Decisions</h3>
       <p>When to Reverse Air:</p>
-      <ul>
-        <li>More than 50% of total drying cycle completed</li>
-        <li>Safe to reverse at 25% corn moisture or less</li>
-      </ul>
+      <ul><li>More than 50% of total drying cycle completed</li><li>Safe to reverse at 25% corn moisture or less</li></ul>
       <p>When to Start Shelling:</p>
-      <ul>
-        <li>Target of 12.5% corn kernel moisture</li>
-        <li>Consult the local quality plan</li>
-      </ul>
+      <ul><li>Target of 12.5% corn kernel moisture</li><li>Consult the local quality plan</li></ul>
     </div>
-
     <div class="quiz-container" data-quiz="q11">
       <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 11 of 25</span></div>
       <div class="quiz-body">
@@ -1007,11 +709,10 @@
           <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">At any time</span></div>
           <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">Only at 12.5% moisture</span></div>
         </div>
-        <div class="quiz-feedback correct"><strong>Correct</strong>>50% of cycle AND ≤25% moisture.</div>
+        <div class="quiz-feedback correct"><strong>Correct</strong>>50% AND ≤25%.</div>
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>>50% AND ≤25%.</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q12">
       <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 12 of 25</span></div>
       <div class="quiz-body">
@@ -1026,7 +727,6 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>12.5%.</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q13">
       <div class="quiz-header"><h3>Reversal Chart</h3><span class="quiz-counter">Q 13 of 25</span></div>
       <div class="quiz-body">
@@ -1041,27 +741,17 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>35%.</div>
       </div>
     </div>
-
     <div class="section-nav"><button class="btn btn-secondary" onclick="goToSection(3)">← Previous</button><button class="btn btn-primary" onclick="goToSection(5)">Next →</button></div>
   </div>
 
   <!-- ═══ SECTION 5 ═══ -->
   <div class="section" id="section-5">
-    <div class="section-header">
-      <div class="section-number">Section 06</div>
-      <h2 class="section-title">Airflow Rate & The Drying Front</h2>
-    </div>
-
+    <div class="section-header"><div class="section-number">Section 06</div><h2 class="section-title">Airflow Rate & The Drying Front</h2></div>
     <div class="content-card">
       <button class="read-card-btn" onclick="readCard(this)"><span>🔊</span> Read Aloud</button>
       <h3>Airflow Rate</h3>
-      <ul>
-        <li>Higher airflow equals faster drying, up to a point</li>
-        <li>At lower seed moisture, the effect becomes less influential</li>
-        <li>Minimum requirement is 10 cubic meters per cubic meter of ear corn per minute</li>
-      </ul>
+      <ul><li>Higher airflow equals faster drying, up to a point</li><li>At lower seed moisture, the effect becomes less influential</li><li>Minimum requirement is 10 cubic meters per cubic meter of ear corn per minute</li></ul>
     </div>
-
     <div class="content-card">
       <button class="read-card-btn" onclick="readCard(this)"><span>🔊</span> Read Aloud</button>
       <h3>The Drying Front</h3>
@@ -1069,10 +759,9 @@
         <li>The drying front is the leading edge of the drying zone</li>
         <li>It advances in the direction of air flow</li>
         <li>Greater airflow means faster front displacement and deeper drying zone</li>
-        <li>Slow displacement and incomplete overlapping of drying zones create variability in seed moisture</li>
+        <li>Slow displacement and incomplete overlapping create variability in seed moisture</li>
       </ul>
     </div>
-
     <div class="quiz-container" data-quiz="q14">
       <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 14 of 25</span></div>
       <div class="quiz-body">
@@ -1087,7 +776,6 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>10 m³/m³/min.</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q16">
       <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 16 of 25</span></div>
       <div class="quiz-body">
@@ -1102,17 +790,12 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>Slow displacement and incomplete overlapping.</div>
       </div>
     </div>
-
     <div class="section-nav"><button class="btn btn-secondary" onclick="goToSection(4)">← Previous</button><button class="btn btn-primary" onclick="goToSection(6)">Next →</button></div>
   </div>
 
   <!-- ═══ SECTION 6 ═══ -->
   <div class="section" id="section-6">
-    <div class="section-header">
-      <div class="section-number">Section 07</div>
-      <h2 class="section-title">Rules for Avoiding Drying Injury & Summary</h2>
-    </div>
-
+    <div class="section-header"><div class="section-number">Section 07</div><h2 class="section-title">Rules for Avoiding Drying Injury & Summary</h2></div>
     <div class="content-card">
       <button class="read-card-btn" onclick="readCard(this)"><span>🔊</span> Read Aloud</button>
       <h3>Rules for Avoiding Drying Injury</h3>
@@ -1124,12 +807,7 @@
         <li>When in doubt about dryer management, seek advice</li>
       </ul>
     </div>
-
-    <div class="callout warning">
-      <div class="callout-label">Greatest Risk</div>
-      <p>Seed quality is at greatest risk at the start of drying when seed moisture is still high, and when airflow is reversed too soon.</p>
-    </div>
-
+    <div class="callout warning"><div class="callout-label">Greatest Risk</div><p>Seed quality is at greatest risk at the start of drying when seed moisture is still high, and when airflow is reversed too soon.</p></div>
     <div class="quiz-container" data-quiz="q17">
       <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 17 of 25</span></div>
       <div class="quiz-body">
@@ -1144,7 +822,6 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>>3 m max.</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q18">
       <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 18 of 25</span></div>
       <div class="quiz-body">
@@ -1159,7 +836,6 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>At the start of drying.</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q19">
       <div class="quiz-header"><h3>Knowledge Check</h3><span class="quiz-counter">Q 19 of 25</span></div>
       <div class="quiz-body">
@@ -1174,17 +850,12 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>Both extremes are problematic.</div>
       </div>
     </div>
-
     <div class="section-nav"><button class="btn btn-secondary" onclick="goToSection(5)">← Previous</button><button class="btn btn-primary" onclick="goToSection(7)">Final Assessment →</button></div>
   </div>
 
   <!-- ═══ SECTION 7 ═══ -->
   <div class="section" id="section-7">
-    <div class="section-header">
-      <div class="section-number">Section 08</div>
-      <h2 class="section-title">Final Assessment</h2>
-    </div>
-
+    <div class="section-header"><div class="section-number">Section 08</div><h2 class="section-title">Final Assessment</h2></div>
     <div class="quiz-container" data-quiz="q20">
       <div class="quiz-header"><h3>Final</h3><span class="quiz-counter">Q 20 of 25</span></div>
       <div class="quiz-body">
@@ -1199,7 +870,6 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>Hours / Points Removed.</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q21">
       <div class="quiz-header"><h3>Final</h3><span class="quiz-counter">Q 21 of 25</span></div>
       <div class="quiz-body">
@@ -1214,7 +884,6 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>Decreases.</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q22">
       <div class="quiz-header"><h3>Final</h3><span class="quiz-counter">Q 22 of 25</span></div>
       <div class="quiz-body">
@@ -1229,14 +898,13 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>A, B, and C.</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q23">
       <div class="quiz-header"><h3>Final</h3><span class="quiz-counter">Q 23 of 25</span></div>
       <div class="quiz-body">
         <div class="quiz-question">Why is airflow less influential at lower moisture?</div>
         <div class="quiz-options">
           <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">A</span><span class="option-text">Dryer reduces airflow automatically</span></div>
-          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">Less moisture remains, making process slower regardless</span></div>
+          <div class="quiz-option" data-correct="true" onclick="selectOption(this)"><span class="option-marker">B</span><span class="option-text">Less moisture remains to remove</span></div>
           <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">C</span><span class="option-text">Low moisture seeds are immune to airflow</span></div>
           <div class="quiz-option" data-correct="false" onclick="selectOption(this)"><span class="option-marker">D</span><span class="option-text">Only matters in tropical conditions</span></div>
         </div>
@@ -1244,7 +912,6 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>Less moisture remains.</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q24">
       <div class="quiz-header"><h3>Final</h3><span class="quiz-counter">Q 24 of 25</span></div>
       <div class="quiz-body">
@@ -1257,23 +924,20 @@
         <div class="quiz-feedback incorrect"><strong>Not quite</strong>TRUE.</div>
       </div>
     </div>
-
     <div class="quiz-container" data-quiz="q25">
       <div class="quiz-header"><h3>Final</h3><span class="quiz-counter">Q 25 of 25</span></div>
       <div class="quiz-body">
         <div class="quiz-question">Match sensitivity level with minimum hours/point:</div>
         <div style="margin:20px 0;">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
-            <div>
-              <div class="drop-label">Sensitivity</div>
+            <div><div class="drop-label">Sensitivity</div>
               <div id="sortable-items" style="display:flex;flex-direction:column;gap:8px;">
                 <div class="drag-item" data-answer="3.0" onclick="cycleMatch(this)">Least Sensitive</div>
                 <div class="drag-item" data-answer="3.5" onclick="cycleMatch(this)">Moderately Sensitive</div>
                 <div class="drag-item" data-answer="4.0" onclick="cycleMatch(this)">Sensitive</div>
               </div>
             </div>
-            <div>
-              <div class="drop-label">Hours/Point</div>
+            <div><div class="drop-label">Hours/Point</div>
               <div style="display:flex;flex-direction:column;gap:8px;">
                 <div class="drop-slot" data-value="3.0">3.0</div>
                 <div class="drop-slot" data-value="3.5">3.5</div>
@@ -1291,589 +955,372 @@
     <div class="score-panel" id="finalScorePanel" style="display:none;">
       <h2>Stellar Seeds — Training Complete</h2>
       <div class="score-number" id="finalScoreNumber">0 / 25</div>
-      <div class="score-detail" id="finalScoreDetail">Questions answered correctly</div>
+      <div class="score-detail" id="finalScoreDetail"></div>
       <div class="score-message" id="finalScoreMessage"></div>
     </div>
 
     <div class="section-nav">
       <button class="btn btn-secondary" onclick="goToSection(6)">← Previous</button>
-      <button class="btn btn-primary" onclick="showFinalScore()">View Final Score</button>
+      <button class="btn btn-primary" onclick="showFinalScore()">View Final Score & Certificate</button>
     </div>
   </div>
 
+</div><!-- /main-container -->
+</div><!-- /mainContent -->
+
+<!-- ═══ CERTIFICATE OVERLAY ═══ -->
+<div class="cert-overlay" id="certOverlay">
+  <div class="cert-wrapper">
+    <canvas id="certCanvas" width="1200" height="850"></canvas>
+    <img id="certImage" style="width:100%;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.4);" alt="Certificate of Completion">
+    <div class="cert-actions">
+      <button class="cert-btn download" onclick="downloadCertificate()">⬇ Download Certificate</button>
+      <button class="cert-btn close" onclick="closeCertificate()">Close</button>
+    </div>
+  </div>
 </div>
 
 <script>
-// ══════════════════════════════════════════════
-//  AUDIO ENGINE — Web Audio API + TTS
-// ══════════════════════════════════════════════
-
-const AudioCtx = window.AudioContext || window.webkitAudioContext;
-let audioCtx = null;
-let soundMuted = false;
-
-function ensureAudioCtx() {
-  if (!audioCtx) audioCtx = new AudioCtx();
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-}
-
-function playTone(freq, duration, type, vol) {
-  if (soundMuted) return;
-  ensureAudioCtx();
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.type = type || 'sine';
-  osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-  gain.gain.setValueAtTime((vol || 0.3) * parseFloat(document.getElementById('volumeSlider').value), audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  osc.start(audioCtx.currentTime);
-  osc.stop(audioCtx.currentTime + duration);
-}
-
-function sfxCorrect() {
-  if (soundMuted) return;
-  playTone(523.25, 0.15, 'sine', 0.25);
-  setTimeout(() => playTone(659.25, 0.15, 'sine', 0.25), 100);
-  setTimeout(() => playTone(783.99, 0.3, 'sine', 0.3), 200);
-}
-
-function sfxIncorrect() {
-  if (soundMuted) return;
-  playTone(311.13, 0.3, 'sawtooth', 0.15);
-  setTimeout(() => playTone(233.08, 0.4, 'sawtooth', 0.12), 200);
-}
-
-function sfxClick() {
-  if (soundMuted) return;
-  playTone(800, 0.05, 'sine', 0.1);
-}
-
-function sfxNav() {
-  if (soundMuted) return;
-  playTone(440, 0.08, 'triangle', 0.12);
-  setTimeout(() => playTone(554.37, 0.1, 'triangle', 0.15), 60);
-}
-
-function sfxComplete() {
-  if (soundMuted) return;
-  [523.25, 659.25, 783.99, 1046.50].forEach((n, i) => {
-    setTimeout(() => playTone(n, 0.25, 'sine', 0.2), i * 150);
-  });
-}
-
-function sfxStartRead() {
-  if (soundMuted) return;
-  playTone(349.23, 0.1, 'triangle', 0.15);
-  setTimeout(() => playTone(440, 0.12, 'triangle', 0.15), 80);
-}
-
-function sfxStopRead() {
-  if (soundMuted) return;
-  playTone(440, 0.1, 'triangle', 0.12);
-  setTimeout(() => playTone(349.23, 0.15, 'triangle', 0.1), 80);
-}
-
-function toggleMute() {
-  soundMuted = !soundMuted;
-  const btn = document.getElementById('muteBtn');
-  const indicator = document.getElementById('soundIndicator');
-  if (soundMuted) {
-    btn.innerHTML = '<span>🔕</span> Sound FX';
-    btn.classList.remove('active');
-    indicator.classList.add('muted');
-  } else {
-    btn.innerHTML = '<span>🔔</span> Sound FX';
-    btn.classList.add('active');
-    indicator.classList.remove('muted');
-    sfxClick();
-  }
-}
-
-// ══════════════════════════════════════════════
-//  TEXT-TO-SPEECH — WITH BULLET POINT PAUSES
-// ══════════════════════════════════════════════
-
-let currentUtterance = null;
-let isSpeaking = false;
-let isPaused = false;
-let currentReadingCard = null;
-let currentHighlightedElements = [];
-let readQueue = [];
-let readQueueIndex = 0;
-let isQueuePlaying = false;
-
-function populateVoices() {
-  const select = document.getElementById('voiceSelect');
-  const voices = speechSynthesis.getVoices();
-  select.innerHTML = '';
-  voices.forEach((v, i) => {
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.textContent = v.name.length > 25 ? v.name.substring(0, 25) + '...' : v.name;
-    if (v.default) opt.selected = true;
-    select.appendChild(opt);
-  });
-}
-
-speechSynthesis.onvoiceschanged = populateVoices;
-populateVoices();
-
-function getSelectedVoice() {
-  const voices = speechSynthesis.getVoices();
-  const idx = document.getElementById('voiceSelect').value;
-  return voices[idx] || voices[0];
-}
-
-// ── Build a structured reading queue from DOM ──
-// Each item: { text: string, element: DOM node, pauseAfter: ms }
-function buildReadingQueue(container) {
-  const queue = [];
-
-  function walkNode(node) {
-    if (!node) return;
-
-    // Skip buttons and quiz containers
-    if (node.classList && (node.classList.contains('read-card-btn') || node.classList.contains('quiz-container'))) return;
-
-    // Headings (h3, h4)
-    if (node.tagName && /^H[3-4]$/.test(node.tagName)) {
-      const text = node.textContent.trim();
-      if (text) {
-        queue.push({ text: text, element: node, pauseAfter: 800 });
-      }
-      return;
-    }
-
-    // Paragraphs
-    if (node.tagName === 'P') {
-      const text = node.textContent.trim();
-      if (text) {
-        queue.push({ text: text, element: node, pauseAfter: 600 });
-      }
-      return;
-    }
-
-    // Unordered lists — each bullet as a separate item with pause
-    if (node.tagName === 'UL') {
-      const items = node.querySelectorAll(':scope > li');
-      items.forEach((li, idx) => {
-        const text = li.textContent.trim();
-        if (text) {
-          // Longer pause between bullet items; extra long at end of list
-          const isLast = idx === items.length - 1;
-          queue.push({ text: text, element: li, pauseAfter: isLast ? 900 : 650 });
-        }
-      });
-      return;
-    }
-
-    // Ordered lists
-    if (node.tagName === 'OL') {
-      const items = node.querySelectorAll(':scope > li');
-      items.forEach((li, idx) => {
-        const text = (idx + 1) + '. ' + li.textContent.trim();
-        const isLast = idx === items.length - 1;
-        queue.push({ text: text, element: li, pauseAfter: isLast ? 900 : 650 });
-      });
-      return;
-    }
-
-    // Formula boxes — read as a single block with longer pause
-    if (node.classList && node.classList.contains('formula-box')) {
-      const text = node.textContent.trim();
-      if (text) {
-        queue.push({ text: text, element: node, pauseAfter: 1000 });
-      }
-      return;
-    }
-
-    // Diagram containers — describe them
-    if (node.classList && node.classList.contains('diagram-container')) {
-      const boxes = node.querySelectorAll('.diagram-box');
-      if (boxes.length > 0) {
-        let desc = '';
-        boxes.forEach((box, i) => {
-          desc += box.textContent.trim().replace(/\n/g, ' ');
-          if (i < boxes.length - 1) desc += ' ... then ... ';
-        });
-        queue.push({ text: desc, element: node, pauseAfter: 800 });
-      }
-      return;
-    }
-
-    // Tables
-    if (node.tagName === 'TABLE') {
-      const rows = node.querySelectorAll('tbody tr');
-      rows.forEach(row => {
-        const cells = row.querySelectorAll('td');
-        const rowText = Array.from(cells).map(c => c.textContent.trim()).join(', ');
-        if (rowText) {
-          queue.push({ text: rowText, element: row, pauseAfter: 500 });
-        }
-      });
-      return;
-    }
-
-    // Callouts
-    if (node.classList && node.classList.contains('callout')) {
-      const label = node.querySelector('.callout-label');
-      const p = node.querySelector('p');
-      let text = '';
-      if (label) text += label.textContent.trim() + '. ';
-      if (p) text += p.textContent.trim();
-      if (text) {
-        queue.push({ text: text, element: node, pauseAfter: 800 });
-      }
-      return;
-    }
-
-    // For other containers (div, section, content-card), recurse children
-    if (node.children && node.children.length > 0) {
-      Array.from(node.children).forEach(child => walkNode(child));
-    }
-
-    // Text nodes at leaf level (not inside handled elements)
-    if (!node.children || node.children.length === 0) {
-      if (node.nodeType === 3) {
-        const text = node.textContent.trim();
-        if (text && text.length > 1) {
-          queue.push({ text: text, element: node.parentElement, pauseAfter: 500 });
-        }
-      }
-    }
-  }
-
-  walkNode(container);
-  return queue;
-}
-
-// ── Highlight helpers ──
-function highlightElement(el) {
-  if (el && el.classList) {
-    el.classList.add('reading-now');
-    currentHighlightedElements.push(el);
-  }
-}
-
-function clearHighlights() {
-  currentHighlightedElements.forEach(el => {
-    if (el && el.classList) el.classList.remove('reading-now');
-  });
-  currentHighlightedElements = [];
-}
-
-// ── Speak a single text chunk ──
-function speakSingle(text, onEnd) {
-  return new Promise((resolve) => {
-    speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.voice = getSelectedVoice();
-    utterance.rate = parseFloat(document.getElementById('speedSelect').value);
-    utterance.volume = parseFloat(document.getElementById('volumeSlider').value);
-    utterance.pitch = 1;
-
-    utterance.onend = () => resolve();
-    utterance.onerror = () => resolve();
-
-    currentUtterance = utterance;
-    speechSynthesis.speak(utterance);
-  });
-}
-
-// ── Play the queue sequentially with pauses ──
-async function playQueue(queue, readingBtn, cardElement) {
-  isQueuePlaying = true;
-  isSpeaking = true;
-  readQueue = queue;
-  readQueueIndex = 0;
-
-  document.getElementById('audioStatus').textContent = '🔊 Speaking...';
-  document.getElementById('readSlideBtn').classList.add('active');
-  if (readingBtn) readingBtn.classList.add('reading');
-  if (cardElement) cardElement.classList.add('speaking');
-
-  for (let i = 0; i < queue.length; i++) {
-    if (!isQueuePlaying) break;
-
-    readQueueIndex = i;
-    const item = queue[i];
-
-    // Highlight current element
-    clearHighlights();
-    highlightElement(item.element);
-
-    // Update status
-    document.getElementById('audioStatus').textContent = `🔊 ${i + 1}/${queue.length}`;
-
-    // Speak
-    await speakSingle(item.text);
-
-    if (!isQueuePlaying) break;
-
-    // Pause between items (bullet point pause)
-    await new Promise(resolve => setTimeout(resolve, item.pauseAfter || 500));
-  }
-
-  // Done
-  clearHighlights();
-  isQueuePlaying = false;
-  isSpeaking = false;
-  document.getElementById('audioStatus').textContent = 'Ready';
-  document.getElementById('readSlideBtn').classList.remove('active');
-  if (readingBtn) readingBtn.classList.remove('reading');
-  if (cardElement) cardElement.classList.remove('speaking');
-  currentReadingCard = null;
-}
-
-// ── Public API ──
-function readCurrentSlide() {
-  const section = document.querySelector('.section.active');
-  if (!section) return;
-  stopSpeaking();
-  sfxStartRead();
-
-  const cards = section.querySelectorAll('.content-card');
-  let allQueue = [];
-
-  // Title + subtitle
-  const title = section.querySelector('.section-title');
-  const subtitle = section.querySelector('.section-subtitle');
-  if (title) allQueue.push({ text: title.textContent.trim(), element: title, pauseAfter: 800 });
-  if (subtitle) allQueue.push({ text: subtitle.textContent.trim(), element: subtitle, pauseAfter: 600 });
-
-  // Each card
-  cards.forEach(card => {
-    const cardQueue = buildReadingQueue(card);
-    allQueue = allQueue.concat(cardQueue);
-    // Add pause between cards
-    if (cardQueue.length > 0) {
-      allQueue.push({ text: '', element: null, pauseAfter: 1000, silent: true });
-    }
-  });
-
-  // Filter out empty items
-  allQueue = allQueue.filter(item => item.silent || (item.text && item.text.trim().length > 0));
-
-  if (allQueue.length === 0) {
-    document.getElementById('audioStatus').textContent = 'No text to read';
-    return;
-  }
-
-  playQueue(allQueue, null, null);
-}
-
-function readCard(btn) {
-  const card = btn.closest('.content-card');
-  if (!card) return;
-  stopSpeaking();
-  sfxStartRead();
-  currentReadingCard = btn;
-
-  const queue = buildReadingQueue(card);
-  if (queue.length === 0) return;
-
-  playQueue(queue, btn, card);
-}
-
-function stopSpeaking() {
-  isQueuePlaying = false;
-  speechSynthesis.cancel();
-  isSpeaking = false;
-  isPaused = false;
-  clearHighlights();
-  document.getElementById('audioStatus').textContent = 'Ready';
-  document.getElementById('readSlideBtn').classList.remove('active');
-  document.getElementById('pauseBtn').innerHTML = '<span>⏸</span> Pause';
-  if (currentReadingCard) {
-    currentReadingCard.classList.remove('reading');
-    const card = currentReadingCard.closest('.content-card');
-    if (card) card.classList.remove('speaking');
-    currentReadingCard = null;
-  }
-  sfxStopRead();
-}
-
-function togglePause() {
-  if (!isSpeaking && !isPaused) return;
-  if (isPaused) {
-    speechSynthesis.resume();
-    isPaused = false;
-    document.getElementById('pauseBtn').innerHTML = '<span>⏸</span> Pause';
-    document.getElementById('audioStatus').textContent = `🔊 ${readQueueIndex + 1}/${readQueue.length}`;
-  } else {
-    speechSynthesis.pause();
-    isPaused = true;
-    document.getElementById('pauseBtn').innerHTML = '<span>▶</span> Resume';
-    document.getElementById('audioStatus').textContent = '⏸ Paused';
-  }
-}
-
-// ══════════════════════════════════════════════
-//  QUIZ & NAVIGATION LOGIC
-// ══════════════════════════════════════════════
-
+// ═══ STATE ═══
+let userName = '';
 let currentSection = 0;
 let totalAnswered = 0;
 let totalCorrect = 0;
 const totalQuestions = 25;
 const answeredQuestions = new Set();
 
-function goToSection(idx) {
+// ═══ NAME ENTRY ═══
+function startTraining() {
+  const input = document.getElementById('userName');
+  const err = document.getElementById('nameError');
+  const name = input.value.trim();
+  if (!name || name.length < 2) { err.style.display = 'block'; input.focus(); return; }
+  err.style.display = 'none';
+  userName = name;
+  document.getElementById('nameScreen').classList.add('hidden');
+  document.getElementById('topBar').style.display = 'flex';
+  document.getElementById('audioBar').style.display = 'flex';
+  document.getElementById('mainContent').style.display = 'block';
+  document.getElementById('userGreeting').textContent = 'Welcome, ' + userName;
   sfxNav();
-  stopSpeaking();
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('section-' + idx).classList.add('active');
-  document.querySelector(`.nav-tab[data-section="${idx}"]`).classList.add('active');
-  currentSection = idx;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(populateVoices, 300);
 }
 
-document.querySelectorAll('.nav-tab').forEach(tab => {
-  tab.addEventListener('click', () => goToSection(parseInt(tab.dataset.section)));
+document.getElementById('userName').addEventListener('keydown', e => {
+  if (e.key === 'Enter') startTraining();
 });
 
-function selectOption(el) {
-  const container = el.closest('.quiz-container');
-  const qId = container.dataset.quiz;
-  if (answeredQuestions.has(qId)) return;
-  const options = container.querySelectorAll('.quiz-option');
-  const isCorrect = el.dataset.correct === 'true';
-  options.forEach(opt => {
-    opt.classList.add('disabled');
-    if (opt.dataset.correct === 'true') opt.classList.add('correct');
+// ═══ AUDIO ENGINE ═══
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+let soundMuted = false;
+
+function ensureAudioCtx() { if (!audioCtx) audioCtx = new AudioCtx(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
+
+function playTone(freq, dur, type, vol) {
+  if (soundMuted) return; ensureAudioCtx();
+  const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+  o.type = type||'sine'; o.frequency.setValueAtTime(freq, audioCtx.currentTime);
+  g.gain.setValueAtTime((vol||0.3)*parseFloat(document.getElementById('volumeSlider').value), audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+dur);
+  o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+dur);
+}
+
+function sfxCorrect(){if(soundMuted)return;playTone(523.25,0.15,'sine',0.25);setTimeout(()=>playTone(659.25,0.15,'sine',0.25),100);setTimeout(()=>playTone(783.99,0.3,'sine',0.3),200);}
+function sfxIncorrect(){if(soundMuted)return;playTone(311.13,0.3,'sawtooth',0.15);setTimeout(()=>playTone(233.08,0.4,'sawtooth',0.12),200);}
+function sfxClick(){if(soundMuted)return;playTone(800,0.05,'sine',0.1);}
+function sfxNav(){if(soundMuted)return;playTone(440,0.08,'triangle',0.12);setTimeout(()=>playTone(554.37,0.1,'triangle',0.15),60);}
+function sfxComplete(){if(soundMuted)return;[523.25,659.25,783.99,1046.50].forEach((n,i)=>{setTimeout(()=>playTone(n,0.25,'sine',0.2),i*150);});}
+function sfxStartRead(){if(soundMuted)return;playTone(349.23,0.1,'triangle',0.15);setTimeout(()=>playTone(440,0.12,'triangle',0.15),80);}
+function sfxStopRead(){if(soundMuted)return;playTone(440,0.1,'triangle',0.12);setTimeout(()=>playTone(349.23,0.15,'triangle',0.1),80);}
+
+function toggleMute(){
+  soundMuted=!soundMuted;
+  const btn=document.getElementById('muteBtn'),ind=document.getElementById('soundIndicator');
+  if(soundMuted){btn.innerHTML='<span>🔕</span> Sound FX';btn.classList.remove('active');ind.classList.add('muted');}
+  else{btn.innerHTML='<span>🔔</span> Sound FX';btn.classList.add('active');ind.classList.remove('muted');sfxClick();}
+}
+
+// ═══ TTS ENGINE ═══
+let currentReadingCard=null;let currentHighlightedElements=[];let readQueue=[];let readQueueIndex=0;let isQueuePlaying=false;let isSpeaking=false;let isPaused=false;
+
+function populateVoices(){
+  const sel=document.getElementById('voiceSelect');const voices=speechSynthesis.getVoices();sel.innerHTML='';
+  voices.forEach((v,i)=>{const o=document.createElement('option');o.value=i;o.textContent=v.name.length>30?v.name.substring(0,30)+'...':v.name;sel.appendChild(o);});
+  // Auto-select Google UK Male
+  let best=-1,bestScore=0;
+  voices.forEach((v,i)=>{const n=v.name.toLowerCase();let s=0;
+    if(n.includes('google uk english male'))s=100;
+    else if(n.includes('google')&&n.includes('uk')&&n.includes('male'))s=10;
+    else if(n.includes('google')&&n.includes('uk')&&n.includes('english'))s=8;
+    else if(n.includes('google')&&n.includes('male'))s=6;
+    else if(n.includes('google')&&(n.includes('uk')||n.includes('gb')||n.includes('britain')))s=5;
+    else if(n.includes('english')&&n.includes('male')&&v.lang&&v.lang.includes('en-GB'))s=4;
+    else if(n.includes('google')&&n.includes('english'))s=3;
+    else if(n.includes('google'))s=2;
+    if(s>bestScore){bestScore=s;best=i;}
   });
-  el.classList.add('selected');
-  if (!isCorrect) el.classList.add('incorrect');
-  const feedbacks = container.querySelectorAll('.quiz-feedback');
-  if (isCorrect) { feedbacks[0].classList.add('show'); totalCorrect++; sfxCorrect(); }
-  else { feedbacks[1].classList.add('show'); sfxIncorrect(); }
-  answeredQuestions.add(qId);
-  totalAnswered++;
-  updateProgress();
+  if(best===-1)best=0;
+  sel.value=best;
+  console.log('Voice selected:',voices[best]?.name,`(${voices[best]?.lang})`);
 }
+speechSynthesis.onvoiceschanged=populateVoices;populateVoices();setTimeout(populateVoices,200);setTimeout(populateVoices,500);
 
-function selectMultiOption(el) {
-  const container = el.closest('.quiz-container');
-  const qId = container.dataset.quiz;
-  if (answeredQuestions.has(qId)) return;
-  el.classList.toggle('selected');
-  sfxClick();
-  const selected = container.querySelectorAll('.quiz-option.selected');
-  if (selected.length >= 2) setTimeout(() => gradeMultiSelect(container), 400);
-}
+function getSelectedVoice(){const v=speechSynthesis.getVoices();return v[document.getElementById('voiceSelect').value]||v[0];}
 
-function gradeMultiSelect(container) {
-  const qId = container.dataset.quiz;
-  if (answeredQuestions.has(qId)) return;
-  const options = container.querySelectorAll('.quiz-option');
-  let allCorrect = true;
-  options.forEach(opt => {
-    opt.classList.add('disabled');
-    const shouldBe = opt.dataset.correct === 'true';
-    const isSelected = opt.classList.contains('selected');
-    if (shouldBe) { opt.classList.add('correct'); if (!isSelected) allCorrect = false; }
-    if (isSelected && !shouldBe) { opt.classList.add('incorrect'); allCorrect = false; }
-  });
-  const feedbacks = container.querySelectorAll('.quiz-feedback');
-  if (allCorrect) { feedbacks[0].classList.add('show'); totalCorrect++; sfxCorrect(); }
-  else { feedbacks[1].classList.add('show'); sfxIncorrect(); }
-  answeredQuestions.add(qId);
-  totalAnswered++;
-  updateProgress();
-}
-
-function checkFillBlank(inputId, accepted, feedbackId) {
-  const input = document.getElementById(inputId);
-  const val = input.value.trim().toLowerCase();
-  const container = input.closest('.quiz-container');
-  const qId = container.dataset.quiz;
-  if (answeredQuestions.has(qId)) return;
-  const isCorrect = accepted.some(a => val === a.toLowerCase());
-  if (isCorrect) {
-    input.style.borderBottomColor = 'var(--brand-green-mid)';
-    document.getElementById(feedbackId + '-correct').classList.add('show');
-    totalCorrect++; sfxCorrect();
-  } else {
-    input.style.borderBottomColor = 'var(--red)';
-    document.getElementById(feedbackId + '-incorrect').classList.add('show');
-    sfxIncorrect();
-  }
-  input.disabled = true;
-  answeredQuestions.add(qId);
-  totalAnswered++;
-  updateProgress();
-}
-
-let currentDragItem = null;
-function cycleMatch(el) {
-  const qId = el.closest('.quiz-container').dataset.quiz;
-  if (answeredQuestions.has(qId)) return;
-  sfxClick();
-  if (currentDragItem === el) { el.classList.remove('selected'); currentDragItem = null; return; }
-  document.querySelectorAll('#sortable-items .drag-item').forEach(d => d.classList.remove('selected'));
-  el.classList.add('selected');
-  currentDragItem = el;
-  const slots = document.querySelectorAll('.drop-slot');
-  for (const slot of slots) {
-    if (!slot.classList.contains('filled')) {
-      slot.textContent = el.textContent;
-      slot.classList.add('filled');
-      el.classList.add('placed');
-      currentDragItem = null;
-      el.classList.remove('selected');
-      break;
+function buildReadingQueue(container){
+  const q=[];
+  function walk(node){
+    if(!node)return;
+    if(node.classList&&(node.classList.contains('read-card-btn')||node.classList.contains('quiz-container')))return;
+    if(node.tagName&&/^H[3-4]$/.test(node.tagName)){const t=node.textContent.trim();if(t)q.push({text:t,element:node,pauseAfter:800});return;}
+    if(node.tagName==='P'){const t=node.textContent.trim();if(t)q.push({text:t,element:node,pauseAfter:600});return;}
+    if(node.tagName==='UL'||node.tagName==='OL'){
+      const items=node.querySelectorAll(':scope > li');
+      items.forEach((li,idx)=>{const t=(node.tagName==='OL'?(idx+1)+'. ':'')+li.textContent.trim();if(t)q.push({text:t,element:li,pauseAfter:idx===items.length-1?900:650});});
+      return;
     }
+    if(node.classList&&node.classList.contains('formula-box')){const t=node.textContent.trim();if(t)q.push({text:t,element:node,pauseAfter:1000});return;}
+    if(node.classList&&node.classList.contains('diagram-container')){const boxes=node.querySelectorAll('.diagram-box');if(boxes.length){let d='';boxes.forEach((b,i)=>{d+=b.textContent.trim().replace(/\n/g,' ');if(i<boxes.length-1)d+=' then ';});q.push({text:d,element:node,pauseAfter:800});}return;}
+    if(node.tagName==='TABLE'){node.querySelectorAll('tbody tr').forEach(row=>{const cells=row.querySelectorAll('td');const rt=Array.from(cells).map(c=>c.textContent.trim()).join(', ');if(rt)q.push({text:rt,element:row,pauseAfter:500});});return;}
+    if(node.classList&&node.classList.contains('callout')){const l=node.querySelector('.callout-label');const p=node.querySelector('p');let t='';if(l)t+=l.textContent.trim()+'. ';if(p)t+=p.textContent.trim();if(t)q.push({text:t,element:node,pauseAfter:800});return;}
+    if(node.children&&node.children.length>0)Array.from(node.children).forEach(c=>walk(c));
+    if(!node.children||node.children.length===0){if(node.nodeType===3){const t=node.textContent.trim();if(t&&t.length>1)q.push({text:t,element:node.parentElement,pauseAfter:500});}}
   }
+  walk(container);return q;
 }
 
-function checkMatching() {
-  const qId = 'q25';
-  if (answeredQuestions.has(qId)) return;
-  const items = document.querySelectorAll('#sortable-items .drag-item');
-  const slots = document.querySelectorAll('.drop-slot');
-  let allCorrect = true;
-  items.forEach((item, idx) => {
-    if (slots[idx].dataset.value !== item.dataset.answer) allCorrect = false;
-  });
-  if (allCorrect) {
-    document.getElementById('q25-correct').classList.add('show');
-    totalCorrect++; sfxCorrect();
-  } else {
-    document.getElementById('q25-incorrect').classList.add('show');
-    sfxIncorrect();
-    items.forEach((item, idx) => { slots[idx].textContent = item.dataset.answer; });
+function highlightElement(el){if(el&&el.classList){el.classList.add('reading-now');currentHighlightedElements.push(el);}}
+function clearHighlights(){currentHighlightedElements.forEach(el=>{if(el&&el.classList)el.classList.remove('reading-now');});currentHighlightedElements=[];}
+
+function speakSingle(text){return new Promise(resolve=>{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.voice=getSelectedVoice();u.rate=parseFloat(document.getElementById('speedSelect').value);u.volume=parseFloat(document.getElementById('volumeSlider').value);u.pitch=1;u.onend=()=>resolve();u.onerror=()=>resolve();speechSynthesis.speak(u);});}
+
+async function playQueue(queue,btn,card){
+  isQueuePlaying=true;isSpeaking=true;readQueue=queue;readQueueIndex=0;
+  document.getElementById('audioStatus').textContent='🔊 Speaking...';
+  document.getElementById('readSlideBtn').classList.add('active');
+  if(btn)btn.classList.add('reading');if(card)card.classList.add('speaking');
+  for(let i=0;i<queue.length;i++){
+    if(!isQueuePlaying)break;readQueueIndex=i;const item=queue[i];
+    clearHighlights();if(item.element)highlightElement(item.element);
+    document.getElementById('audioStatus').textContent=`🔊 ${i+1}/${queue.length}`;
+    if(item.text&&!item.silent)await speakSingle(item.text);
+    if(!isQueuePlaying)break;
+    await new Promise(r=>setTimeout(r,item.pauseAfter||500));
   }
-  answeredQuestions.add(qId);
-  totalAnswered++;
-  updateProgress();
+  clearHighlights();isQueuePlaying=false;isSpeaking=false;
+  document.getElementById('audioStatus').textContent='Ready';
+  document.getElementById('readSlideBtn').classList.remove('active');
+  if(btn)btn.classList.remove('reading');if(card)card.classList.remove('speaking');currentReadingCard=null;
 }
 
-function updateProgress() {
-  const pct = Math.round((totalAnswered / totalQuestions) * 100);
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = pct + '%';
-  document.getElementById('scoreDisplay').textContent = `Score: ${totalCorrect} / ${totalAnswered}`;
+function readCurrentSlide(){
+  const sec=document.querySelector('.section.active');if(!sec)return;stopSpeaking();sfxStartRead();
+  const cards=sec.querySelectorAll('.content-card');let allQ=[];
+  const title=sec.querySelector('.section-title');const sub=sec.querySelector('.section-subtitle');
+  if(title)allQ.push({text:title.textContent.trim(),element:title,pauseAfter:800});
+  if(sub)allQ.push({text:sub.textContent.trim(),element:sub,pauseAfter:600});
+  cards.forEach(card=>{const cq=buildReadingQueue(card);allQ=allQ.concat(cq);if(cq.length)allQ.push({text:'',element:null,pauseAfter:1000,silent:true});});
+  allQ=allQ.filter(i=>i.silent||(i.text&&i.text.trim().length>0));
+  if(!allQ.length){document.getElementById('audioStatus').textContent='No text';return;}
+  playQueue(allQ,null,null);
 }
 
-function showFinalScore() {
+function readCard(btn){
+  const card=btn.closest('.content-card');if(!card)return;stopSpeaking();sfxStartRead();currentReadingCard=btn;
+  const q=buildReadingQueue(card);if(!q.length)return;playQueue(q,btn,card);
+}
+
+function stopSpeaking(){
+  isQueuePlaying=false;speechSynthesis.cancel();isSpeaking=false;isPaused=false;clearHighlights();
+  document.getElementById('audioStatus').textContent='Ready';document.getElementById('readSlideBtn').classList.remove('active');
+  document.getElementById('pauseBtn').innerHTML='<span>⏸</span> Pause';
+  if(currentReadingCard){currentReadingCard.classList.remove('reading');const c=currentReadingCard.closest('.content-card');if(c)c.classList.remove('speaking');currentReadingCard=null;}
+  sfxStopRead();
+}
+
+function togglePause(){
+  if(!isSpeaking&&!isPaused)return;
+  if(isPaused){speechSynthesis.resume();isPaused=false;document.getElementById('pauseBtn').innerHTML='<span>⏸</span> Pause';document.getElementById('audioStatus').textContent=`🔊 ${readQueueIndex+1}/${readQueue.length}`;}
+  else{speechSynthesis.pause();isPaused=true;document.getElementById('pauseBtn').innerHTML='<span>▶</span> Resume';document.getElementById('audioStatus').textContent='⏸ Paused';}
+}
+
+// ═══ QUIZ LOGIC ═══
+function goToSection(idx){sfxNav();stopSpeaking();document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('section-'+idx).classList.add('active');document.querySelector(`.nav-tab[data-section="${idx}"]`).classList.add('active');currentSection=idx;window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('.nav-tab').forEach(tab=>{tab.addEventListener('click',()=>goToSection(parseInt(tab.dataset.section)));});
+
+function selectOption(el){const c=el.closest('.quiz-container'),qId=c.dataset.quiz;if(answeredQuestions.has(qId))return;const opts=c.querySelectorAll('.quiz-option');const ok=el.dataset.correct==='true';opts.forEach(o=>{o.classList.add('disabled');if(o.dataset.correct==='true')o.classList.add('correct');});el.classList.add('selected');if(!ok)el.classList.add('incorrect');const fb=c.querySelectorAll('.quiz-feedback');if(ok){fb[0].classList.add('show');totalCorrect++;sfxCorrect();}else{fb[1].classList.add('show');sfxIncorrect();}answeredQuestions.add(qId);totalAnswered++;updateProgress();}
+
+function selectMultiOption(el){const c=el.closest('.quiz-container'),qId=c.dataset.quiz;if(answeredQuestions.has(qId))return;el.classList.toggle('selected');sfxClick();const sel=c.querySelectorAll('.quiz-option.selected');if(sel.length>=2)setTimeout(()=>gradeMulti(c),400);}
+
+function gradeMulti(c){const qId=c.dataset.quiz;if(answeredQuestions.has(qId))return;const opts=c.querySelectorAll('.quiz-option');let ok=true;opts.forEach(o=>{o.classList.add('disabled');const s=o.dataset.correct==='true';const i=o.classList.contains('selected');if(s){o.classList.add('correct');if(!i)ok=false;}if(i&&!s){o.classList.add('incorrect');ok=false;}});const fb=c.querySelectorAll('.quiz-feedback');if(ok){fb[0].classList.add('show');totalCorrect++;sfxCorrect();}else{fb[1].classList.add('show');sfxIncorrect();}answeredQuestions.add(qId);totalAnswered++;updateProgress();}
+
+function checkFillBlank(inputId,accepted,fbId){const input=document.getElementById(inputId);const v=input.value.trim().toLowerCase();const c=input.closest('.quiz-container'),qId=c.dataset.quiz;if(answeredQuestions.has(qId))return;const ok=accepted.some(a=>v===a.toLowerCase());if(ok){input.style.borderBottomColor='var(--brand-green-mid)';document.getElementById(fbId+'-correct').classList.add('show');totalCorrect++;sfxCorrect();}else{input.style.borderBottomColor='var(--red)';document.getElementById(fbId+'-incorrect').classList.add('show');sfxIncorrect();}input.disabled=true;answeredQuestions.add(qId);totalAnswered++;updateProgress();}
+
+let currentDragItem=null;
+function cycleMatch(el){const qId=el.closest('.quiz-container').dataset.quiz;if(answeredQuestions.has(qId))return;sfxClick();if(currentDragItem===el){el.classList.remove('selected');currentDragItem=null;return;}document.querySelectorAll('#sortable-items .drag-item').forEach(d=>d.classList.remove('selected'));el.classList.add('selected');currentDragItem=el;const slots=document.querySelectorAll('.drop-slot');for(const s of slots){if(!s.classList.contains('filled')){s.textContent=el.textContent;s.classList.add('filled');el.classList.add('placed');currentDragItem=null;el.classList.remove('selected');break;}}}
+
+function checkMatching(){const qId='q25';if(answeredQuestions.has(qId))return;const items=document.querySelectorAll('#sortable-items .drag-item'),slots=document.querySelectorAll('.drop-slot');let ok=true;items.forEach((it,idx)=>{if(slots[idx].dataset.value!==it.dataset.answer)ok=false;});if(ok){document.getElementById('q25-correct').classList.add('show');totalCorrect++;sfxCorrect();}else{document.getElementById('q25-incorrect').classList.add('show');sfxIncorrect();items.forEach((it,idx)=>{slots[idx].textContent=it.dataset.answer;});}answeredQuestions.add(qId);totalAnswered++;updateProgress();}
+
+function updateProgress(){const pct=Math.round((totalAnswered/totalQuestions)*100);document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressLabel').textContent=pct+'%';document.getElementById('scoreDisplay').textContent=`Score: ${totalCorrect} / ${totalAnswered}`;}
+
+// ═══ FINAL SCORE & CERTIFICATE ═══
+function showFinalScore(){
   sfxComplete();
-  const panel = document.getElementById('finalScorePanel');
-  panel.style.display = 'block';
-  document.getElementById('finalScoreNumber').textContent = `${totalCorrect} / ${totalQuestions}`;
-  const pct = Math.round((totalCorrect / totalQuestions) * 100);
-  let msg = '';
-  if (pct >= 90) msg = 'Outstanding! You have mastered Stellar Seeds seed corn drying principles.';
-  else if (pct >= 70) msg = 'Good work! Review missed areas to strengthen your expertise.';
-  else if (pct >= 50) msg = 'Foundational knowledge in place. Review lessons and retake.';
-  else msg = 'Additional study recommended before practical application.';
-  document.getElementById('finalScoreMessage').textContent = msg;
-  panel.scrollIntoView({ behavior: 'smooth' });
+  const panel=document.getElementById('finalScorePanel');panel.style.display='block';
+  document.getElementById('finalScoreNumber').textContent=`${totalCorrect} / ${totalQuestions}`;
+  const pct=Math.round((totalCorrect/totalQuestions)*100);
+  let msg='';
+  if(pct>=90)msg='Outstanding! You have mastered Stellar Seeds seed corn drying principles.';
+  else if(pct>=70)msg='Good work! Review missed areas to strengthen your expertise.';
+  else if(pct>=50)msg='Foundational knowledge in place. Review lessons and retake.';
+  else msg='Additional study recommended before practical application.';
+  document.getElementById('finalScoreMessage').textContent=msg;
+  panel.scrollIntoView({behavior:'smooth'});
+  speakSingle(`Training complete. You scored ${totalCorrect} out of ${totalQuestions}. ${msg}`);
+  setTimeout(()=>generateCertificate(),1500);
+}
 
-  const scoreText = `Training complete. You scored ${totalCorrect} out of ${totalQuestions}. ${msg}`;
-  speakSingle(scoreText);
+function generateCertificate(){
+  const canvas=document.getElementById('certCanvas');const ctx=canvas.getContext('2d');
+  const W=1200,H=850;canvas.width=W;canvas.height=H;
+  const pct=Math.round((totalCorrect/totalQuestions)*100);
+  const today=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  // Background
+  ctx.fillStyle='#0a3d2e';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#0f5138';ctx.fillRect(20,20,W-40,H-40);
+  ctx.fillStyle='#0a3d2e';ctx.fillRect(30,30,W-60,H-60);
+
+  // Inner cream
+  ctx.fillStyle='#f9f6ef';ctx.fillRect(50,50,W-100,H-100);
+
+  // Gold border lines
+  ctx.strokeStyle='#d4a843';ctx.lineWidth=3;ctx.strokeRect(60,60,W-120,H-120);
+  ctx.lineWidth=1;ctx.strokeRect(68,68,W-136,H-136);
+
+  // Corner ornaments
+  const cornerSize=40;
+  ctx.strokeStyle='#d4a843';ctx.lineWidth=2;
+  [[75,75,1,1],[W-75,75,-1,1],[75,H-75,1,-1],[W-75,H-75,-1,-1]].forEach(([x,y,dx,dy])=>{
+    ctx.beginPath();ctx.moveTo(x,y+dy*cornerSize);ctx.lineTo(x,y);ctx.lineTo(x+dx*cornerSize,y);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x+dx*8,y+dy*8);ctx.lineTo(x+dx*8,y+dy*(cornerSize-5));ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x+dx*8,y+dy*8);ctx.lineTo(x+dx*(cornerSize-5),y+dy*8);ctx.stroke();
+  });
+
+  // Star decoration at top
+  ctx.fillStyle='#d4a843';
+  const starY=110;
+  for(let i=-2;i<=2;i++){
+    const sx=W/2+i*30;
+    ctx.beginPath();
+    for(let j=0;j<5;j++){
+      const a=(j*4*Math.PI/5)-Math.PI/2;
+      const r=j%2===0?8:3;
+      if(j===0)ctx.moveTo(sx+Math.cos(a)*r,starY+Math.sin(a)*r);
+      else ctx.lineTo(sx+Math.cos(a)*r,starY+Math.sin(a)*r);
+    }
+    ctx.closePath();ctx.fill();
+  }
+
+  // Header
+  ctx.fillStyle='#146b4a';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.font='600 14px JetBrains Mono, monospace';ctx.fillText('STELLAR SEEDS',W/2,145);
+
+  // Title
+  ctx.fillStyle='#0a3d2e';
+  ctx.font='40px "DM Serif Display", Georgia, serif';ctx.fillText('Certificate of Completion',W/2,200);
+
+  // Decorative line
+  ctx.strokeStyle='#d4a843';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W/2-200,230);ctx.lineTo(W/2+200,230);ctx.stroke();
+  ctx.fillStyle='#d4a843';ctx.beginPath();ctx.arc(W/2-205,230,4,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(W/2+205,230,4,0,Math.PI*2);ctx.fill();
+
+  // Subtitle
+  ctx.fillStyle='#8a7e6e';ctx.font='16px "Source Serif 4", Georgia, serif';
+  ctx.fillText('This is to certify that',W/2,280);
+
+  // Name (elegant)
+  ctx.fillStyle='#146b4a';ctx.font='52px "Great Vibes", cursive';
+  ctx.fillText(userName,W/2,345);
+
+  // Underline for name
+  const nameW=ctx.measureText(userName).width;
+  ctx.strokeStyle='#d4a843';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(W/2-nameW/2-20,365);ctx.lineTo(W/2+nameW/2+20,365);ctx.stroke();
+
+  // Description
+  ctx.fillStyle='#4a4035';ctx.font='17px "Source Serif 4", Georgia, serif';
+  ctx.fillText('has successfully completed the training module',W/2,415);
+
+  // Course Title
+  ctx.fillStyle='#0a3d2e';ctx.font='600 22px "DM Serif Display", Georgia, serif';
+  ctx.fillText('Basic Seed Corn Drying Principles',W/2,460);
+
+  // Score badge
+  ctx.fillStyle='#0f5138';ctx.beginPath();
+  const badgeX=W/2,badgeY=520,bw=220,bh=60;
+  ctx.moveTo(badgeX-bw/2+12,badgeY-bh/2);ctx.lineTo(badgeX+bw/2-12,badgeY-bh/2);
+  ctx.quadraticCurveTo(badgeX+bw/2,badgeY-bh/2,badgeX+bw/2,badgeY-bh/2+12);
+  ctx.lineTo(badgeX+bw/2,badgeY+bh/2-12);
+  ctx.quadraticCurveTo(badgeX+bw/2,badgeY+bh/2,badgeX+bw/2-12,badgeY+bh/2);
+  ctx.lineTo(badgeX-bw/2+12,badgeY+bh/2);
+  ctx.quadraticCurveTo(badgeX-bw/2,badgeY+bh/2,badgeX-bw/2,badgeY+bh/2-12);
+  ctx.lineTo(badgeX-bw/2,badgeY-bh/2+12);
+  ctx.quadraticCurveTo(badgeX-bw/2,badgeY-bh/2,badgeX-bw/2+12,badgeY-bh/2);
+  ctx.closePath();ctx.fill();
+
+  ctx.fillStyle='#f0d080';ctx.font='600 13px JetBrains Mono, monospace';ctx.fillText('SCORE',badgeX,badgeY-14);
+  ctx.fillStyle='#ffffff';ctx.font='36px "DM Serif Display", serif';ctx.fillText(`${totalCorrect}/${totalQuestions}`,badgeX,badgeY+16);
+
+  // Grade
+  let grade='Distinction';let gradeColor='#d4a843';
+  if(pct<90){grade='Merit';gradeColor='#146b4a';}
+  if(pct<70){grade='Pass';gradeColor='#4a4035';}
+  if(pct<50){grade='Needs Improvement';gradeColor='#8a7e6e';}
+
+  ctx.fillStyle=gradeColor;font='600 15px JetBrains Mono, monospace';
+  ctx.font='600 15px "JetBrains Mono", monospace';ctx.fillText(`Grade: ${grade} (${pct}%)`,W/2,585);
+
+  // Date & Certificate ID
+  const certId='SS-DRY-'+Date.now().toString(36).toUpperCase();
+  ctx.fillStyle='#8a7e6e';ctx.font='13px "JetBrains Mono", monospace';
+  ctx.fillText(`Date: ${today}    |    Certificate ID: ${certId}`,W/2,640);
+
+  // Footer decorative line
+  ctx.strokeStyle='#d4a843';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(W/2-250,670);ctx.lineTo(W/2+250,670);ctx.stroke();
+
+  // Signature lines
+  ctx.fillStyle='#4a4035';ctx.font='14px "Source Serif 4", serif';
+  ctx.fillText('________________________',W/2-180,730);
+  ctx.fillText('________________________',W/2+180,730);
+  ctx.fillStyle='#8a7e6e';ctx.font='11px "JetBrains Mono", monospace';
+  ctx.fillText('Training Coordinator',W/2-180,752);
+  ctx.fillText('Quality Manager',W/2+180,752);
+
+  // Stellar Seeds at bottom
+  ctx.fillStyle='#146b4a';ctx.font='600 12px "JetBrains Mono", monospace';
+  ctx.fillText('STELLAR SEEDS — EXCELLENCE FROM HARVEST TO STORAGE',W/2,800);
+
+  // Convert to image
+  const img=document.getElementById('certImage');
+  img.src=canvas.toDataURL('image/png');
+
+  // Show overlay
+  document.getElementById('certOverlay').classList.add('show');
+}
+
+function downloadCertificate(){
+  const canvas=document.getElementById('certCanvas');
+  const link=document.createElement('a');
+  const safeName=userName.replace(/[^a-zA-Z0-9 ]/g,'').replace(/\s+/g,'_');
+  link.download=`Stellar_Seeds_Certificate_${safeName}.png`;
+  link.href=canvas.toDataURL('image/png');
+  link.click();
+  sfxClick();
+}
+
+function closeCertificate(){
+  document.getElementById('certOverlay').classList.remove('show');
 }
 
 updateProgress();
